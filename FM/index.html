@@ -83,7 +83,7 @@
 <meta property="og:site_name" content="CodeCat&#39;s Blog">
 <meta property="og:description" content="这是一个有关于机器学习的因子分解机的内容">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-08T10:09:00.646Z">
+<meta property="og:updated_time" content="2019-08-08T10:36:40.321Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习之因子分解机">
 <meta name="twitter:description" content="这是一个有关于机器学习的因子分解机的内容">
@@ -365,7 +365,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  522
+                  861
                 </span>
               
 
@@ -381,7 +381,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  3
                 </span>
               
             </div>
@@ -493,6 +493,10 @@
 <li>人工特征工程（数据分析＋人工构造）</li>
 <li>通过模型做组合特征的学习（FM方法）</li>
 </ol>
+<p>多项式模型是包含特征组合的最直观的模型。在多项式模型中，特征 $x_i$和 $x_j$ 的组合采用 $x_ix_j$ 表示，即 $x_i$和 $x_j$都非零时，组合特征 $x_ix_j$才有意义<br>二阶多项式模型如下：</p>
+<p>矩阵分解提供了另一种解决思路。对于度为2的因子分解机FM的模型为：</p>
+<script type="math/tex; mode=display">\hat{y(x)}=w_{0}+\sum_{i=1}^{n} w_{i} x_{i}+\sum_{i=1}^{n} \sum_{j=i+1}^{n}\langle v_ i, v _j\rangle x_{i} x_{j}</script><script type="math/tex; mode=display">\left\langle v_{i}, v_{j}\right\rangle=\sum_{f=1}^{k} v_{i, f} \cdot v_{j, f}</script><p><strong>模型分析：</strong><br>$k$为超参数，且$k$的大小称为因子分解机FM算法的度。在此模型中，前面两部分是传统的线性模型，最后一部分将两个互异特征分量之间的相互关系考虑进来了。</p>
+<p><strong>交叉项系数：</strong><br>对于每一个特征分量$x_i$引入隐向量$V_i =(v_{i,1},v_{i,2},…v_{i,k})$，利用$V_iV_j^T$对交叉项的系数的参数$w_{ij}$进行估计。这样参数学习由之前学习交叉项参数$w_{ij}$的过程，转变为学习$n$个单特征对应k维隐向量的过程。很明显，单特征参数（k维隐向量$V_i$）的学习要比交叉项参数$w_{ij}$学习的更加充分</p>
 <h3 id="2-因子分解机FM的优势："><a href="#2-因子分解机FM的优势：" class="headerlink" title="2.因子分解机FM的优势："></a>2.因子分解机FM的优势：</h3><p>FM模型对稀疏数据有更好的学习能力，通过交互项可以学习特征之间的关联关系，并且保证了学习效率和预估能。</p>
 <h3 id="3-因子分解机FM可以处理的问题"><a href="#3-因子分解机FM可以处理的问题" class="headerlink" title="3.因子分解机FM可以处理的问题"></a>3.因子分解机FM可以处理的问题</h3><ol>
 <li>回归问题（Regression)</li>
@@ -833,7 +837,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共9.8k字</span>
+  <span class="post-count">博客全站共10.2k字</span>
 </div>
         
 
