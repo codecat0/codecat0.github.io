@@ -75,22 +75,22 @@
 
 
 
-<meta name="description" content="Logistic Regression1.逻辑回归的介绍逻辑回归算法是一种分类算法，是典型的监督学习，其训练样本包含样本的特征和标签信息，在二分类中，标签为离散值，如{+1，-1}，分别表示正类和负类。分类算法通过对训练样本的学习，得到从样本特征到样本标签之间的映射关系，也被称为假设函数，之后可利用该假设函数对新数据进行分类。 2.逻辑回归模型 逻辑回归模型是广义线性模型的一种，属于线性的分类模">
+<meta name="description" content="这是一篇有关于机器学习中逻辑回归算法的内容">
 <meta name="keywords" content="算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习之逻辑回归">
 <meta property="og:url" content="https://codecat0.github.io/LR/index.html">
 <meta property="og:site_name" content="CodeCat&#39;s Blog">
-<meta property="og:description" content="Logistic Regression1.逻辑回归的介绍逻辑回归算法是一种分类算法，是典型的监督学习，其训练样本包含样本的特征和标签信息，在二分类中，标签为离散值，如{+1，-1}，分别表示正类和负类。分类算法通过对训练样本的学习，得到从样本特征到样本标签之间的映射关系，也被称为假设函数，之后可利用该假设函数对新数据进行分类。 2.逻辑回归模型 逻辑回归模型是广义线性模型的一种，属于线性的分类模">
+<meta property="og:description" content="这是一篇有关于机器学习中逻辑回归算法的内容">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190405192453525.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzM1NjMx,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190405192530917.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzM1NjMx,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190405192555176.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzM1NjMx,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190405192621407.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzM1NjMx,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2019-08-08T08:53:22.411Z">
+<meta property="og:updated_time" content="2019-08-08T08:54:48.809Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习之逻辑回归">
-<meta name="twitter:description" content="Logistic Regression1.逻辑回归的介绍逻辑回归算法是一种分类算法，是典型的监督学习，其训练样本包含样本的特征和标签信息，在二分类中，标签为离散值，如{+1，-1}，分别表示正类和负类。分类算法通过对训练样本的学习，得到从样本特征到样本标签之间的映射关系，也被称为假设函数，之后可利用该假设函数对新数据进行分类。 2.逻辑回归模型 逻辑回归模型是广义线性模型的一种，属于线性的分类模">
+<meta name="twitter:description" content="这是一篇有关于机器学习中逻辑回归算法的内容">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190405192453525.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzM1NjMx,size_16,color_FFFFFF,t_70">
 
 
@@ -370,7 +370,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2k
+                  2.1k
                 </span>
               
 
@@ -407,7 +407,9 @@
       
 
       
-        <a id="more"></a>
+        <blockquote>
+<p>这是一篇有关于机器学习中逻辑回归算法的内容<br><a id="more"></a></p>
+</blockquote>
 <h1 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="Logistic Regression"></a>Logistic Regression</h1><h3 id="1-逻辑回归的介绍"><a href="#1-逻辑回归的介绍" class="headerlink" title="1.逻辑回归的介绍"></a>1.逻辑回归的介绍</h3><p><strong>逻辑回归算法是一种分类算法，是典型的监督学习，其训练样本包含样本的特征和标签信息，在二分类中，标签为离散值，如{+1，-1}，分别表示正类和负类。分类算法通过对训练样本的学习，得到从样本特征到样本标签之间的映射关系，也被称为假设函数，之后可利用该假设函数对新数据进行分类。</strong></p>
 <h3 id="2-逻辑回归模型"><a href="#2-逻辑回归模型" class="headerlink" title="2.逻辑回归模型"></a>2.逻辑回归模型</h3><p><img src="https://img-blog.csdnimg.cn/20190405192453525.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNzM1NjMx,size_16,color_FFFFFF,t_70" alt></p>
 <p><strong>逻辑回归模型是广义线性模型的一种，属于线性的分类模型。对于图中的线性可分的问题，需要找到一条直线，能够将俩个不同的类分开。这条直线称为超平面，可以使用如下的线性函数表示</strong></p>
