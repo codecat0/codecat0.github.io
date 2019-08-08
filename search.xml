@@ -54,6 +54,31 @@
     
     
     <entry>
+      <title>机器学习之因子分解机</title>
+      <link href="/FM/"/>
+      <url>/FM/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>这是一个有关于机器学习的因子分解机的内容<br><a id="more"></a></p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> 机器学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 算法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>机器学习之逻辑回归</title>
       <link href="/LR/"/>
       <url>/LR/</url>
