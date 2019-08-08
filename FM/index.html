@@ -83,7 +83,7 @@
 <meta property="og:site_name" content="CodeCat&#39;s Blog">
 <meta property="og:description" content="这是一个有关于机器学习的因子分解机的内容">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-08T10:01:30.526Z">
+<meta property="og:updated_time" content="2019-08-08T10:09:00.646Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习之因子分解机">
 <meta name="twitter:description" content="这是一个有关于机器学习的因子分解机的内容">
@@ -365,7 +365,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  20
+                  522
                 </span>
               
 
@@ -405,7 +405,101 @@
         <blockquote>
 <p>这是一个有关于机器学习的因子分解机的内容<br><a id="more"></a></p>
 </blockquote>
-
+<h1 id="Factorization-Machine"><a href="#Factorization-Machine" class="headerlink" title="Factorization Machine"></a>Factorization Machine</h1><h2 id="一，因子分解机FM的介绍"><a href="#一，因子分解机FM的介绍" class="headerlink" title="一，因子分解机FM的介绍"></a>一，因子分解机FM的介绍</h2><h3 id="1-独热编码（One-Hot-Encoding）-amp-amp-FM的原理介绍"><a href="#1-独热编码（One-Hot-Encoding）-amp-amp-FM的原理介绍" class="headerlink" title="1.独热编码（One-Hot Encoding）&amp;&amp; FM的原理介绍"></a>1.独热编码（One-Hot Encoding）&amp;&amp; FM的原理介绍</h3><p>假设一个广告分类的问题，根据用户和广告位相关的特征，预测用户是否点击了广告。数据如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>点击？</th>
+<th>地区</th>
+<th>性别</th>
+<th>广告类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Asia</td>
+<td>male</td>
+<td>Game</td>
+</tr>
+<tr>
+<td>0</td>
+<td>US</td>
+<td>female</td>
+<td>movie</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Europe</td>
+<td>male</td>
+<td>Game</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>点击是标签。地区，性别，广告类型是特征。经过One-Hot编码转换成数值型特征，结果如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>点击？</th>
+<th>地区=Asia</th>
+<th>地区=US</th>
+<th>地区=Europe</th>
+<th>性别=male</th>
+<th>性别=female</th>
+<th>广告类型=Game</th>
+<th>广告类型=movie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>由上表可以看出，经过One-Hot编码之后，大部分样本数据特征是比较稀疏的。<br>同时通过观察大量的样本数据可以发现，某些特征经过关联之后，与label之间的相关性就会提高。如：“male”与“Game”、“female”与“movie”这样的关联特征，对用户的点击有着正向的影响。这种关联特征与label的正向相关性在实际问题中是普遍存在的，如“化妆品”类商品与“女”性，“球类运动配件”的商品与“男”等。因此，引入两个特征的组合是非常有意义的。</p>
+<p>表示特征之间的关联，最直接的方法的是构造组合特征：</p>
+<ol>
+<li>人工特征工程（数据分析＋人工构造）</li>
+<li>通过模型做组合特征的学习（FM方法）</li>
+</ol>
+<h3 id="2-因子分解机FM的优势："><a href="#2-因子分解机FM的优势：" class="headerlink" title="2.因子分解机FM的优势："></a>2.因子分解机FM的优势：</h3><p>FM模型对稀疏数据有更好的学习能力，通过交互项可以学习特征之间的关联关系，并且保证了学习效率和预估能。</p>
+<h3 id="3-因子分解机FM可以处理的问题"><a href="#3-因子分解机FM可以处理的问题" class="headerlink" title="3.因子分解机FM可以处理的问题"></a>3.因子分解机FM可以处理的问题</h3><ol>
+<li>回归问题（Regression)</li>
+<li>二分类问题（Binary Classification)</li>
+<li>排序（ranking）</li>
+</ol>
+<h2 id="二，FM算法的求解（二分类问题）"><a href="#二，FM算法的求解（二分类问题）" class="headerlink" title="二，FM算法的求解（二分类问题）"></a>二，FM算法的求解（二分类问题）</h2><h3 id="1-二分类因子分解机FM算法的损失函数"><a href="#1-二分类因子分解机FM算法的损失函数" class="headerlink" title="1.二分类因子分解机FM算法的损失函数"></a>1.二分类因子分解机FM算法的损失函数</h3>
       
     </div>
     
@@ -530,8 +624,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -655,6 +758,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Factorization-Machine"><span class="nav-number">1.</span> <span class="nav-text">Factorization Machine</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一，因子分解机FM的介绍"><span class="nav-number">1.1.</span> <span class="nav-text">一，因子分解机FM的介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-独热编码（One-Hot-Encoding）-amp-amp-FM的原理介绍"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.独热编码（One-Hot Encoding）&amp;&amp; FM的原理介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-因子分解机FM的优势："><span class="nav-number">1.1.2.</span> <span class="nav-text">2.因子分解机FM的优势：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-因子分解机FM可以处理的问题"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.因子分解机FM可以处理的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二，FM算法的求解（二分类问题）"><span class="nav-number">1.2.</span> <span class="nav-text">二，FM算法的求解（二分类问题）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-二分类因子分解机FM算法的损失函数"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.二分类因子分解机FM算法的损失函数</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -714,7 +833,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共9.3k字</span>
+  <span class="post-count">博客全站共9.8k字</span>
 </div>
         
 
