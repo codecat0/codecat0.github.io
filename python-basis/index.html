@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cat.ico?v=5.1.4">
+
+
+
+
+
+
+  <meta name="keywords" content="基础,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="CodeCat's Blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="这篇文章适合于Python初学者来学习">
+<meta name="keywords" content="基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python基础知识简单介绍">
+<meta property="og:url" content="https://codecat0.github.io/python-basis/index.html">
+<meta property="og:site_name" content="CodeCat&#39;s Blog">
+<meta property="og:description" content="这篇文章适合于Python初学者来学习">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-08T08:27:04.617Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python基础知识简单介绍">
+<meta name="twitter:description" content="这篇文章适合于Python初学者来学习">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://codecat0.github.io/python-basis/">
+
+
+
+
+
+  <title>Python基础知识简单介绍 | CodeCat's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/codecat0" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CodeCat's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://codecat0.github.io/python-basis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CodeCat">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CodeCat's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python基础知识简单介绍</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-08T16:16:54+08:00">
+                2019-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.5k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>这篇文章适合于Python初学者来学习<br><a id="more"></a></p>
+</blockquote>
+<h2 id="基本语法元素"><a href="#基本语法元素" class="headerlink" title="基本语法元素"></a>基本语法元素</h2><h3 id="一，程序的格式框架"><a href="#一，程序的格式框架" class="headerlink" title="一，程序的格式框架"></a>一，程序的格式框架</h3><h4 id="1-缩进"><a href="#1-缩进" class="headerlink" title="1.缩进"></a>1.缩进</h4><p><strong>python语言采用严格的“缩进”来表示程序的逻辑</strong></p>
+<h4 id="2-注释"><a href="#2-注释" class="headerlink" title="2.注释"></a>2.注释</h4><p><strong>python采用“#”表示一行注释的开始，多行注释需在每行开始都使用“#”</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">100</span> <span class="comment">#这是注释</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-续行符"><a href="#3-续行符" class="headerlink" title="3.续行符"></a>3.续行符</h4><p><strong>续行符由反斜杠（\）符号表示</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"&#123;&#125;是&#123;&#125;的首都"</span>.format(\</span><br><span class="line">        <span class="string">"北京"</span>,\</span><br><span class="line">        <span class="string">"中国"</span>\</span><br><span class="line">        ))</span><br></pre></td></tr></table></figure>
+<p><strong>等价于<code>print(&quot;{}是{}的首都.format(&quot;北京&quot;,&quot;中国&quot;))</code></strong></p>
+<h3 id="二，语法元素的名称"><a href="#二，语法元素的名称" class="headerlink" title="二，语法元素的名称"></a>二，语法元素的名称</h3><h4 id="1-变量"><a href="#1-变量" class="headerlink" title="1.变量"></a>1.变量</h4><p><strong>python语言中，变量可以随时命名，随时赋值，随时使用</strong></p>
+<h4 id="2-命名"><a href="#2-命名" class="headerlink" title="2.命名"></a>2.命名</h4><p><strong>python采用大小写字母，数字，下划线和汉字等字符及其组合命名，但首字符不能是数字</strong></p>
+<h4 id="3-关键字"><a href="#3-关键字" class="headerlink" title="3.关键字"></a>3.关键字</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>and</th>
+<th>as</th>
+<th>assert</th>
+<th>break</th>
+<th>class</th>
+<th>continue</th>
+<th>def</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>del</td>
+<td>elif</td>
+<td>else</td>
+<td>except</td>
+<td>False</td>
+<td>finally</td>
+<td>for</td>
+</tr>
+<tr>
+<td>form</td>
+<td>global</td>
+<td>if</td>
+<td>import</td>
+<td>in</td>
+<td>is</td>
+<td>lambda</td>
+</tr>
+<tr>
+<td>None</td>
+<td>nonlocal</td>
+<td>not</td>
+<td>or</td>
+<td>pass</td>
+<td>raise</td>
+<td>return</td>
+</tr>
+<tr>
+<td>True</td>
+<td>try</td>
+<td>while</td>
+<td>with</td>
+<td>yield</td>
+<td>async</td>
+<td>await</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="三-基本输入，输出函数"><a href="#三-基本输入，输出函数" class="headerlink" title="三.基本输入，输出函数"></a>三.基本输入，输出函数</h3><h4 id="1-input-函数"><a href="#1-input-函数" class="headerlink" title="1.input()函数"></a>1.input()函数</h4><p><strong>input()函数从控制台获得用户的一行输入，无论用户输入什么内容，input()函数都以字符串类型返回结果</strong><br></p>
+<h4 id="2-eval-函数"><a href="#2-eval-函数" class="headerlink" title="2.eval()函数"></a>2.eval()函数</h4><p><strong>eval(a)函数将去掉字符串a最外侧的引号</strong><br></p>
+<h4 id="3-print-函数"><a href="#3-print-函数" class="headerlink" title="3.print()函数"></a>3.print()函数</h4><p><strong>用于输出运算结果</strong><br></p>
+<h2 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h2><h3 id="一，数字类型"><a href="#一，数字类型" class="headerlink" title="一，数字类型"></a>一，数字类型</h3><h4 id="1-整数类型"><a href="#1-整数类型" class="headerlink" title="1.整数类型"></a>1.整数类型</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>进制种类</th>
+<th>引导符号</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>十进制</td>
+<td>无</td>
+<td>123</td>
+</tr>
+<tr>
+<td>二进制</td>
+<td>0b或0B</td>
+<td>由字符0和1组成，例如：0b1010，0B1010</td>
+</tr>
+<tr>
+<td>八进制</td>
+<td>0o或0O</td>
+<td>由字符0-7组成，例如：0o1010，0O1010</td>
+</tr>
+<tr>
+<td>十六进制</td>
+<td>0x或0X</td>
+<td>由字符0-9，a-f，A-F组成，例如：0x1010</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="2-浮点数"><a href="#2-浮点数" class="headerlink" title="2.浮点数"></a>2.浮点数</h4><p><strong>带有小数的值，例如：1010.0，1010.，1.01e3，1.01E3</strong></p>
+<h4 id="3-复数类型"><a href="#3-复数类型" class="headerlink" title="3.复数类型"></a>3.复数类型</h4><p><strong>复数可以看作是二元有序实数对（a,b)，表示a+bj。注意：1，当b为1时，不能省略。2，a b都为浮点数</strong></p>
+<h3 id="二，数字类型的运算"><a href="#二，数字类型的运算" class="headerlink" title="二，数字类型的运算"></a>二，数字类型的运算</h3><h4 id="1-数值运算操作符"><a href="#1-数值运算操作符" class="headerlink" title="1.数值运算操作符"></a>1.数值运算操作符</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x+y</td>
+<td>和</td>
+</tr>
+<tr>
+<td>x-y</td>
+<td>差</td>
+</tr>
+<tr>
+<td>x*y</td>
+<td>积</td>
+</tr>
+<tr>
+<td>x/y</td>
+<td>商</td>
+</tr>
+<tr>
+<td>x//y</td>
+<td>整数商</td>
+</tr>
+<tr>
+<td>x%y</td>
+<td>余数</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>x的负值</td>
+</tr>
+<tr>
+<td>+x</td>
+<td>x本身</td>
+</tr>
+<tr>
+<td>x**y</td>
+<td>x的y次幂</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="2-数值运算函数"><a href="#2-数值运算函数" class="headerlink" title="2.数值运算函数"></a>2.数值运算函数</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abs(x)</td>
+<td>x的绝对值</td>
+</tr>
+<tr>
+<td>divmod(x,y)</td>
+<td>(x//y,x%y)</td>
+</tr>
+<tr>
+<td>pow(x,y)</td>
+<td>x**y</td>
+</tr>
+<tr>
+<td>round(x,d)</td>
+<td>对x四舍五入，保留d位小数</td>
+</tr>
+<tr>
+<td>max($x_1,x_2,…,x_n$)</td>
+<td>求最大值</td>
+</tr>
+<tr>
+<td>min($x_1,x_2,…,x_n$)</td>
+<td>求最小值</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code>abs(-30+40j)</code></p>
+<p>结果为：50.0</p>
+<h3 id="三，字符串类型及格式化"><a href="#三，字符串类型及格式化" class="headerlink" title="三，字符串类型及格式化"></a>三，字符串类型及格式化</h3><p><strong>字符串是字符的序列表示</strong></p>
+<h4 id="1-索引"><a href="#1-索引" class="headerlink" title="1.索引"></a>1.索引</h4><p><strong>&lt;字符串&gt;[序号]</strong><br><code>&quot;abc&quot;[1]</code> = <code>&#39;b&#39;</code></p>
+<h4 id="2-切片"><a href="#2-切片" class="headerlink" title="2.切片"></a>2.切片</h4><p><strong>&lt;字符串&gt;[N:M]：切片获取字符串从N到M（不包含M）的子字符串</strong><br><code>&quot;abcdef&quot;[1:3]</code> = <code>&#39;bc&#39;</code></p>
+<h4 id="3-format-方法的格式控制"><a href="#3-format-方法的格式控制" class="headerlink" title="3.format()方法的格式控制"></a>3.format()方法的格式控制</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>:</th>
+<th>填充</th>
+<th>对齐</th>
+<th>宽度</th>
+<th>，</th>
+<th>.精度</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>引导符号</td>
+<td>用于填充的字符</td>
+<td>&lt;左对齐;&gt;右对齐;^居中对齐</td>
+<td>槽的设定输出宽度</td>
+<td>数字的千位分隔符</td>
+<td>浮点小数部分的精度或字符串的最大输出长度</td>
+<td>整数类型：b,c,d,o,x；浮点数类型：e,f,%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="四，字符串类型的操作"><a href="#四，字符串类型的操作" class="headerlink" title="四，字符串类型的操作"></a>四，字符串类型的操作</h3><h4 id="1-字符串操作符"><a href="#1-字符串操作符" class="headerlink" title="1.字符串操作符"></a>1.字符串操作符</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x+y</td>
+<td>连接字符串x和y</td>
+</tr>
+<tr>
+<td>x*n</td>
+<td>复制n次字符串x</td>
+</tr>
+<tr>
+<td>x in s</td>
+<td>如果x是字符串s的字串，返回True，否则返回False</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="2-字符串处理函数"><a href="#2-字符串处理函数" class="headerlink" title="2.字符串处理函数"></a>2.字符串处理函数</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>len(x)</td>
+<td>返回字符串x的长度</td>
+</tr>
+<tr>
+<td>str(x)</td>
+<td>返回任意类型x的字符串形式</td>
+</tr>
+<tr>
+<td>chr(x)</td>
+<td>返回Unicode编码x对应的单字符</td>
+</tr>
+<tr>
+<td>ord(x)</td>
+<td>返回单字符x对应的Unicode编码</td>
+</tr>
+<tr>
+<td>hex(x)</td>
+<td>返回整数x对应的十六进制</td>
+</tr>
+<tr>
+<td>oct(x)</td>
+<td>返回整数x对应的八进制</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="3-字符串处理方法"><a href="#3-字符串处理方法" class="headerlink" title="3.字符串处理方法"></a>3.字符串处理方法</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>str.slower()</td>
+<td>返回字符串的副本，全部字符小写</td>
+</tr>
+<tr>
+<td>str.upper()</td>
+<td>返回字符串的副本，全部字符大写</td>
+</tr>
+<tr>
+<td>str.split(sep)</td>
+<td>返回一个列表，由str根据sep被分割的部分组成</td>
+</tr>
+<tr>
+<td>str.count(sub)</td>
+<td>返回sub字串出现的次数</td>
+</tr>
+<tr>
+<td>str.replace(old,new)</td>
+<td>返回字符串的副本，所有old字串被替换为new</td>
+</tr>
+<tr>
+<td>str.center(width)</td>
+<td>字符串居中函数</td>
+</tr>
+<tr>
+<td>str.join(iter)</td>
+<td>返回一个新字符串，将iter变量的每一个元素增加一个str字符串</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="五，类型判断与类型间转换"><a href="#五，类型判断与类型间转换" class="headerlink" title="五，类型判断与类型间转换"></a>五，类型判断与类型间转换</h3><p><strong>type(x)函数对变量x进行类型判断</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int(x)</td>
+<td>将x转换成整数</td>
+</tr>
+<tr>
+<td>float(x)</td>
+<td>将x转换成浮点数</td>
+</tr>
+<tr>
+<td>str(x)</td>
+<td>将x转换成字符串</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="程序的控制结构"><a href="#程序的控制结构" class="headerlink" title="程序的控制结构"></a>程序的控制结构</h2><h3 id="一，程序的分支结构"><a href="#一，程序的分支结构" class="headerlink" title="一，程序的分支结构"></a>一，程序的分支结构</h3><h4 id="1-单分支结构：if"><a href="#1-单分支结构：if" class="headerlink" title="1.单分支结构：if"></a>1.单分支结构：if</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s = eval(input(<span class="string">"请输入一个整数:"</span>)</span><br><span class="line"><span class="keyword">if</span> s % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">    print(<span class="string">"这是偶数"</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="2-二分支结构：if-else"><a href="#2-二分支结构：if-else" class="headerlink" title="2.二分支结构：if-else"></a>2.二分支结构：if-else</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">s = eval(input(<span class="string">"请输入一个整数:"</span>)</span><br><span class="line"><span class="keyword">if</span> s % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">    print(<span class="string">"这是偶数"</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">"这是奇数"</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="3-多分支结构：if-elif-else"><a href="#3-多分支结构：if-elif-else" class="headerlink" title="3.多分支结构：if-elif-else"></a>3.多分支结构：if-elif-else</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">score = eval(input(<span class="string">"请输入一个百分制成绩："</span>))</span><br><span class="line"><span class="keyword">if</span> score &gt;= <span class="number">60.0</span>:</span><br><span class="line">    grade = <span class="string">"D"</span></span><br><span class="line"><span class="keyword">elif</span> score &gt;= <span class="number">70.0</span>:</span><br><span class="line">    grade = <span class="string">"C"</span></span><br><span class="line"><span class="keyword">elif</span> score &gt;= <span class="number">80.0</span>:</span><br><span class="line">    grade = <span class="string">"B"</span></span><br><span class="line"><span class="keyword">elif</span> score &gt;= <span class="number">90.0</span>:</span><br><span class="line">    grade = <span class="string">"A"</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    grade = <span class="string">"E"</span></span><br><span class="line">print(<span class="string">"对应的五分制成绩：&#123;&#125;"</span>.format(grade)</span><br></pre></td></tr></table></figure>
+<h3 id="二，程序的循环结构"><a href="#二，程序的循环结构" class="headerlink" title="二，程序的循环结构"></a>二，程序的循环结构</h3><h4 id="1-遍历循环：for"><a href="#1-遍历循环：for" class="headerlink" title="1.遍历循环：for"></a>1.遍历循环：for</h4><blockquote>
+<p><strong>for 循环变量 in 遍历结构：</strong><br><br><strong>语句块</strong> </p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"Python"</span>:</span><br><span class="line">        print(i)</span><br></pre></td></tr></table></figure>
+<h4 id="2-无限循环：while"><a href="#2-无限循环：while" class="headerlink" title="2.无限循环：while"></a>2.无限循环：while</h4><blockquote>
+<p><strong>while 条件：</strong><br><br><strong>语句块</strong></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> n &lt; <span class="number">10</span>:</span><br><span class="line">    print(n)</span><br><span class="line">    n = n + <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-循环控制：break和continue"><a href="#3-循环控制：break和continue" class="headerlink" title="3.循环控制：break和continue"></a>3.循环控制：break和continue</h4><p><strong>break用来跳出最内层循环，然后执行循环后的代码</strong></p>
+<p><strong>continue用来结束当前当次循环，即跳出循环体中下面尚未执行的语句，但不跳出当前循环</strong></p>
+<h3 id="三，程序的异常处理"><a href="#三，程序的异常处理" class="headerlink" title="三，程序的异常处理"></a>三，程序的异常处理</h3><blockquote>
+<p><strong>try:</strong><br><br><strong>语句块1</strong><br><br><strong>except：</strong><br><br><strong>语句块2</strong></p>
+</blockquote>
+<p><strong>语句块1是正常执行的内容，当执行这个语句块时出错时，则执行语句块2</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    n = eval(input(<span class="string">"请输入："</span>))</span><br><span class="line">    print(<span class="string">"输入数字的3次方："</span>,n**<span class="number">3</span>)</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">"输入有误"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="一，函数的基本使用"><a href="#一，函数的基本使用" class="headerlink" title="一，函数的基本使用"></a>一，函数的基本使用</h3><blockquote>
+<p><strong>def 函数名(函数参数):</strong><br><strong>函数体</strong><br><strong>return 返回值</strong></p>
+</blockquote>
+<h3 id="二，函数的参数传递"><a href="#二，函数的参数传递" class="headerlink" title="二，函数的参数传递"></a>二，函数的参数传递</h3><h4 id="1-可选参数的传递"><a href="#1-可选参数的传递" class="headerlink" title="1.可选参数的传递"></a>1.可选参数的传递</h4><p><strong>注意：可选参数一般都放置非可选参数后面</strong></p>
+<h4 id="2-参数名称传递"><a href="#2-参数名称传递" class="headerlink" title="2.参数名称传递"></a>2.参数名称传递</h4><h3 id="三，变量的作用域"><a href="#三，变量的作用域" class="headerlink" title="三，变量的作用域"></a>三，变量的作用域</h3><p><strong>变量分为局部变量和全局变量。局部变量仅在函数内部，且作用域也在函数内部。全局变量的作用域跨越多个函数。全局变量要在函数内部使用时，需提前用global关键字声明</strong></p>
+<p><strong>注意：使用global关键字对全局变量声明时，该变量名与外部全局变量同名，且在函数内部对全局变量的操作会改变外部全局变量的值</strong></p>
+<h2 id="组合数据类型"><a href="#组合数据类型" class="headerlink" title="组合数据类型"></a>组合数据类型</h2><h3 id="一，序列类型"><a href="#一，序列类型" class="headerlink" title="一，序列类型"></a>一，序列类型</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x in s</td>
+<td>若x是s的元素，返回True</td>
+</tr>
+<tr>
+<td>x not in s</td>
+<td>若x不是s的元素，返回True</td>
+</tr>
+<tr>
+<td>s + t</td>
+<td>连接s和t</td>
+</tr>
+<tr>
+<td>s*n</td>
+<td>将序列s复制n次</td>
+</tr>
+<tr>
+<td>s[i]</td>
+<td>索引，返回序列第i个元素</td>
+</tr>
+<tr>
+<td>s[i:j]</td>
+<td>切片，返回序列s第i到j个元素的子序列（不含第j个元素）</td>
+</tr>
+<tr>
+<td>s[i:j:k]</td>
+<td>切片，返回序列s第i到j个元素以步长为k的子序列</td>
+</tr>
+<tr>
+<td>len(s)</td>
+<td>序列s的元素的个数</td>
+</tr>
+<tr>
+<td>min(s)</td>
+<td>序列s中最小元素</td>
+</tr>
+<tr>
+<td>max(s)</td>
+<td>序列s中最大元素</td>
+</tr>
+<tr>
+<td>s.index(x)</td>
+<td>序列s中第一次出现x的位置</td>
+</tr>
+<tr>
+<td>s.count(x)</td>
+<td>序列s中出现x的总次数</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="1-字符串【前面介绍了】"><a href="#1-字符串【前面介绍了】" class="headerlink" title="1.字符串【前面介绍了】"></a>1.字符串【前面介绍了】</h4><h4 id="2-元组"><a href="#2-元组" class="headerlink" title="2.元组"></a>2.元组</h4><p><strong>元组类型在python语言中表示为tuple，一般以小括号和逗号组织，且一旦定义就不能修改</strong></p>
+<h4 id="3-列表"><a href="#3-列表" class="headerlink" title="3.列表"></a>3.列表</h4><p><strong>列表的操作方法</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ls.append(x)</td>
+<td>在列表最后增加一个元素x</td>
+</tr>
+<tr>
+<td>ls.insert(i,x)</td>
+<td>在列表第i个位置增加元素x</td>
+</tr>
+<tr>
+<td>ls.clear()</td>
+<td>删除列表中所有元素</td>
+</tr>
+<tr>
+<td>ls.pop(i)</td>
+<td>将列表第i个位置的元素取出并从中删除</td>
+</tr>
+<tr>
+<td>ls.remove(x)</td>
+<td>将列表出现的第一个元素x删除</td>
+</tr>
+<tr>
+<td>ls.reverse()</td>
+<td>反转列表</td>
+</tr>
+<tr>
+<td>ls.copy()</td>
+<td>生成一个新列表，复制ls所有元素</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="二，字典类型"><a href="#二，字典类型" class="headerlink" title="二，字典类型"></a>二，字典类型</h3><p><strong>字典使用大括号或dict（）建立，每一个元素是一个键值对</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d.keys()</td>
+<td>返回所有键信息</td>
+</tr>
+<tr>
+<td>d.values()</td>
+<td>返回所有值信息</td>
+</tr>
+<tr>
+<td>d.items()</td>
+<td>返回所有键值对信息</td>
+</tr>
+<tr>
+<td>d.get(key,default)</td>
+<td>键存在就返回相应值，否则返回default</td>
+</tr>
+<tr>
+<td>d.pop(key,default)</td>
+<td>键存在就返回相应值，同时删除相应值，否则返回default</td>
+</tr>
+<tr>
+<td>d.clear()</td>
+<td>清空字典</td>
+</tr>
+<tr>
+<td>d.popitem()</td>
+<td>随机取出一对键值对，以元组形式返回，并将其从字典中删除</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="三，集合类型"><a href="#三，集合类型" class="headerlink" title="三，集合类型"></a>三，集合类型</h3><p><strong>集合类型与数学中的概念一致，用大括号表示，没有索引和位置的概念</strong></p>
+<h4 id="集合类型操作符"><a href="#集合类型操作符" class="headerlink" title="集合类型操作符"></a>集合类型操作符</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-T</td>
+<td>差集</td>
+</tr>
+<tr>
+<td>S&amp;T</td>
+<td>交集</td>
+</tr>
+<tr>
+<td>S^T</td>
+<td>补集</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>集合类型主要用于去重，适合于任何组合数据类型</strong></p>
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><h4 id="1-文件的打开模式"><a href="#1-文件的打开模式" class="headerlink" title="1.文件的打开模式"></a>1.文件的打开模式</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>打开模式含义</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>‘r’</td>
+<td>只读模式，如果文件不存在，返回异常</td>
+</tr>
+<tr>
+<td>‘w’</td>
+<td>覆盖写模式，文件不存在则创建，存在则完全覆盖原文件</td>
+</tr>
+<tr>
+<td>‘x’</td>
+<td>创建写模式，文件不存在则创建，存在则返回异常</td>
+</tr>
+<tr>
+<td>‘a’</td>
+<td>追加写模式，文件不存在则创建，存在就在原文件最后追加内容</td>
+</tr>
+<tr>
+<td>‘b’</td>
+<td>二进制文件模式</td>
+</tr>
+<tr>
+<td>‘t’</td>
+<td>文本文件模式，默认值</td>
+</tr>
+<tr>
+<td>‘+’</td>
+<td>在原功能基础上增加同时读写功能</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="2-文件读取方法"><a href="#2-文件读取方法" class="headerlink" title="2.文件读取方法"></a>2.文件读取方法</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>f.read(size=-1)</td>
+<td>读入整个文件的内容</td>
+</tr>
+<tr>
+<td>f.readline(size=-1)</td>
+<td>读入一行的内容</td>
+</tr>
+<tr>
+<td>f.readlines(hint=-1)</td>
+<td>读入所有行的内容</td>
+</tr>
+<tr>
+<td>f.seek(offset)</td>
+<td>改变当前文件操作的指针的位置。0：文件开头；2：文件结尾</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="3-文件写入方法"><a href="#3-文件写入方法" class="headerlink" title="3.文件写入方法"></a>3.文件写入方法</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>f.write(s)</td>
+<td>向文件写入一个字符串</td>
+</tr>
+<tr>
+<td>f.writelines(lines)</td>
+<td>将一个元素为字符串的列表整体写入文件</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="传送门"><a href="#传送门" class="headerlink" title="传送门"></a><a href="https://blog.csdn.net/qq_42735631/article/details/81383948" target="_blank" rel="noopener">传送门</a></h2>
+      
+    </div>
+    
+    
+    
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>~~请我吃辣条吧~~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+
+    
+
+    
+      <div id="bitcoin" style="display: inline-block">
+        <img id="bitcoin_qr" src="/images/luffy.jpg" alt="CodeCat 比特币">
+        <p>比特币</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+      
+    </div>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/基础/" rel="tag"><i class="fa fa-tag"></i> 基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/first/" rel="next" title="这个博客网站的诞生----Hexo+GitHub搭建个人博客">
+                <i class="fa fa-chevron-left"></i> 这个博客网站的诞生----Hexo+GitHub搭建个人博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/LR/" rel="prev" title="机器学习之逻辑回归">
+                机器学习之逻辑回归 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CodeCat</p>
+              <p class="site-description motion-element" itemprop="description">背后的伤，是剑士的耻辱！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/codecat0" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:2049413359@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/qq_42735631" target="_blank" title="csdn">
+                      
+                        <i class="fa fa-fw fa-heartbeat"></i>csdn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                推荐阅读
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/qq_42735631" title="我的CSDN" target="_blank">我的CSDN</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.zhihu.com/" title="知乎" target="_blank">知乎</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.douban.com/" title="豆瓣" target="_blank">豆瓣</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.bilibili.com/" title="Bilibili" target="_blank">Bilibili</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://study.163.com/?from=study" title="网易云课堂" target="_blank">网易云课堂</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.icourse163.org/" title="慕课MOOC" target="_blank">慕课MOOC</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本语法元素"><span class="nav-number">1.</span> <span class="nav-text">基本语法元素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一，程序的格式框架"><span class="nav-number">1.1.</span> <span class="nav-text">一，程序的格式框架</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-缩进"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.缩进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-注释"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-续行符"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.续行符</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二，语法元素的名称"><span class="nav-number">1.2.</span> <span class="nav-text">二，语法元素的名称</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-变量"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-命名"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.命名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-关键字"><span class="nav-number">1.2.3.</span> <span class="nav-text">3.关键字</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三-基本输入，输出函数"><span class="nav-number">1.3.</span> <span class="nav-text">三.基本输入，输出函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-input-函数"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.input()函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-eval-函数"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.eval()函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-print-函数"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.print()函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本数据类型"><span class="nav-number">2.</span> <span class="nav-text">基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一，数字类型"><span class="nav-number">2.1.</span> <span class="nav-text">一，数字类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-整数类型"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.整数类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-浮点数"><span class="nav-number">2.1.2.</span> <span class="nav-text">2.浮点数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-复数类型"><span class="nav-number">2.1.3.</span> <span class="nav-text">3.复数类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二，数字类型的运算"><span class="nav-number">2.2.</span> <span class="nav-text">二，数字类型的运算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-数值运算操作符"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.数值运算操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数值运算函数"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.数值运算函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三，字符串类型及格式化"><span class="nav-number">2.3.</span> <span class="nav-text">三，字符串类型及格式化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-索引"><span class="nav-number">2.3.1.</span> <span class="nav-text">1.索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-切片"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.切片</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-format-方法的格式控制"><span class="nav-number">2.3.3.</span> <span class="nav-text">3.format()方法的格式控制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四，字符串类型的操作"><span class="nav-number">2.4.</span> <span class="nav-text">四，字符串类型的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-字符串操作符"><span class="nav-number">2.4.1.</span> <span class="nav-text">1.字符串操作符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-字符串处理函数"><span class="nav-number">2.4.2.</span> <span class="nav-text">2.字符串处理函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-字符串处理方法"><span class="nav-number">2.4.3.</span> <span class="nav-text">3.字符串处理方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五，类型判断与类型间转换"><span class="nav-number">2.5.</span> <span class="nav-text">五，类型判断与类型间转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程序的控制结构"><span class="nav-number">3.</span> <span class="nav-text">程序的控制结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一，程序的分支结构"><span class="nav-number">3.1.</span> <span class="nav-text">一，程序的分支结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-单分支结构：if"><span class="nav-number">3.1.1.</span> <span class="nav-text">1.单分支结构：if</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-二分支结构：if-else"><span class="nav-number">3.1.2.</span> <span class="nav-text">2.二分支结构：if-else</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-多分支结构：if-elif-else"><span class="nav-number">3.1.3.</span> <span class="nav-text">3.多分支结构：if-elif-else</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二，程序的循环结构"><span class="nav-number">3.2.</span> <span class="nav-text">二，程序的循环结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-遍历循环：for"><span class="nav-number">3.2.1.</span> <span class="nav-text">1.遍历循环：for</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-无限循环：while"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.无限循环：while</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-循环控制：break和continue"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.循环控制：break和continue</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三，程序的异常处理"><span class="nav-number">3.3.</span> <span class="nav-text">三，程序的异常处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数"><span class="nav-number">4.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一，函数的基本使用"><span class="nav-number">4.1.</span> <span class="nav-text">一，函数的基本使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二，函数的参数传递"><span class="nav-number">4.2.</span> <span class="nav-text">二，函数的参数传递</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-可选参数的传递"><span class="nav-number">4.2.1.</span> <span class="nav-text">1.可选参数的传递</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-参数名称传递"><span class="nav-number">4.2.2.</span> <span class="nav-text">2.参数名称传递</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三，变量的作用域"><span class="nav-number">4.3.</span> <span class="nav-text">三，变量的作用域</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合数据类型"><span class="nav-number">5.</span> <span class="nav-text">组合数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一，序列类型"><span class="nav-number">5.1.</span> <span class="nav-text">一，序列类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-字符串【前面介绍了】"><span class="nav-number">5.1.1.</span> <span class="nav-text">1.字符串【前面介绍了】</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-元组"><span class="nav-number">5.1.2.</span> <span class="nav-text">2.元组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-列表"><span class="nav-number">5.1.3.</span> <span class="nav-text">3.列表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二，字典类型"><span class="nav-number">5.2.</span> <span class="nav-text">二，字典类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三，集合类型"><span class="nav-number">5.3.</span> <span class="nav-text">三，集合类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#集合类型操作符"><span class="nav-number">5.3.1.</span> <span class="nav-text">集合类型操作符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作"><span class="nav-number">6.</span> <span class="nav-text">文件操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-文件的打开模式"><span class="nav-number">6.0.1.</span> <span class="nav-text">1.文件的打开模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-文件读取方法"><span class="nav-number">6.0.2.</span> <span class="nav-text">2.文件读取方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-文件写入方法"><span class="nav-number">6.0.3.</span> <span class="nav-text">3.文件写入方法</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#传送门"><span class="nav-number">7.</span> <span class="nav-text">传送门</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+          <h3 class="widget-title">Tag Cloud</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width=100%">
+                  <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础/">基础</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">3</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CodeCat</span>
+
+  
+</div>
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+-->
+
+
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">
+  本站访客数:<span id="busuanzi_value_site_pv"></span>
+</span>
+</div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共18.9k字</span>
+</div>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"left","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
