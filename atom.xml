@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://codecat0.github.io/"/>
-  <updated>2019-08-08T10:31:41.399Z</updated>
+  <updated>2019-08-19T02:30:31.841Z</updated>
   <id>https://codecat0.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>VMware的卸载</title>
+    <link href="https://codecat0.github.io/vmware/"/>
+    <id>https://codecat0.github.io/vmware/</id>
+    <published>2019-08-19T02:23:35.000Z</published>
+    <updated>2019-08-19T02:30:31.841Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>vmware的彻底卸载<br><a id="more"></a><br><strong>step1:</strong><br>在控制面板—卸载和更改程序中，选择更改VMware；会出现VMware安装向导<br><img src="../../picture/1.jpg" alt></p></blockquote><p><strong>step2：</strong><br>进入下一步，看到“删除”：从您的计算机中删除VMware Workstation Pro<br><img src="../../picture/2.jpg" alt></p><p><strong>step3:</strong><br>果断选择“删除”，如果需要保留产品配置和产品许可证信息，可在接下来的步骤中去掉前面的勾，当然我这里不需要，全部保留对勾。<br><img src="../../picture/3.jpg" alt></p><p><strong>step4:</strong><br>选好之后，按“下一步”，如何继续按“删除”<br><img src="../../picture/4.jpg" alt></p><p><strong>step5:</strong><br>删除完成后，点击“完成”<br><img src="../../picture/5.jpg" alt></p><p><strong>step6:</strong><br>面，再回到系统的“设置”—&gt;“应用和功能”，找一找VMware，发现已经不见了，说明卸载成功。</p><p><strong>step7:</strong><br>来到左下角，右键找到“运行”（也可使用Win+R快捷键），输入“regedit”，来到“注册表编辑器”。<br><img src="../../picture/6.jpg" alt><br><img src="../../picture/7.jpg" alt></p><p><strong>step8:</strong><br>找到“HKEY_CURRENT_USER”文件夹，点击它前面的“&gt;”，打开它，然后在它的子目录下找到“Software”，打开，找到VMware.Inc，选中之后右键“删除”。<br><img src="../../picture/8.jpg" alt></p><p><strong>step9:</strong><br>最后一步，来到C盘下的“Program Files”目录，找到VMWare文件夹（目前应该是空文件夹了），直接删除！<br><img src="../../picture/9.jpg" alt></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;vmware的彻底卸载&lt;br&gt;
+    
+    </summary>
+    
+      <category term="工具" scheme="https://codecat0.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+      <category term="工具" scheme="https://codecat0.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
+    
+  </entry>
   
   <entry>
     <title>机器学习之支持向量机</title>
