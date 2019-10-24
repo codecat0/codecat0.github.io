@@ -4,6 +4,32 @@
   
     
     <entry>
+      <title>test.md</title>
+      <link href="/test-md-1/"/>
+      <url>/test-md-1/</url>
+      
+        <content type="html"><![CDATA[<a id="more"></a><h1 id="test"><a href="#test" class="headerlink" title="test"></a>test</h1><h1 id="haha"><a href="#haha" class="headerlink" title="haha"></a>haha</h1>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>test.md</title>
+      <link href="/test-md/"/>
+      <url>/test-md/</url>
+      
+        <content type="html"><![CDATA[<a id="more"></a>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>实习杂谈</title>
       <link href="/shi-xi-za-tan/"/>
       <url>/shi-xi-za-tan/</url>
