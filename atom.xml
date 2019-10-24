@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://codecat0.github.io/"/>
-  <updated>2019-10-24T06:42:25.630Z</updated>
+  <updated>2019-08-26T10:10:56.000Z</updated>
   <id>https://codecat0.github.io/</id>
   
   <author>
@@ -15,49 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>test.md</title>
-    <link href="https://codecat0.github.io/test-md-1/"/>
-    <id>https://codecat0.github.io/test-md-1/</id>
-    <published>2019-10-24T06:41:28.000Z</published>
-    <updated>2019-10-24T06:42:25.630Z</updated>
-    
-    <content type="html"><![CDATA[<a id="more"></a><h1 id="test"><a href="#test" class="headerlink" title="test"></a>test</h1><h1 id="haha"><a href="#haha" class="headerlink" title="haha"></a>haha</h1>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-&lt;h1 id=&quot;test&quot;&gt;&lt;a href=&quot;#test&quot; class=&quot;headerlink&quot; title=&quot;test&quot;&gt;&lt;/a&gt;test&lt;/h1&gt;&lt;h1 id=&quot;haha&quot;&gt;&lt;a href=&quot;#haha&quot; class=&quot;headerlink
-      
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>test.md</title>
-    <link href="https://codecat0.github.io/test-md/"/>
-    <id>https://codecat0.github.io/test-md/</id>
-    <published>2019-10-24T06:39:57.000Z</published>
-    <updated>2019-10-24T06:39:57.383Z</updated>
-    
-    <content type="html"><![CDATA[<a id="more"></a>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-      
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>实习杂谈</title>
