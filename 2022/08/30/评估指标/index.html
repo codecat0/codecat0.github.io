@@ -22,30 +22,25 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="FCN论文详解 FCN全卷积网络是图像分割开山之作，其核心思想非常简单，用卷积层代替分类网络中的全连接层。">
+  <meta name="description" content="评估指标常见评价指标有精度、精确率、召回率、P-R曲线、F1 值、TPR、FPR、ROC、AUC等指标，还有在生物领域常用的敏感性、特异性等指标。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="FCN">
-<meta property="og:url" content="http://example.com/2021/12/30/FCN/index.html">
+<meta property="og:title" content="评估指标">
+<meta property="og:url" content="http://example.com/2022/08/30/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/index.html">
 <meta property="og:site_name" content="CodeCat">
-<meta property="og:description" content="FCN论文详解 FCN全卷积网络是图像分割开山之作，其核心思想非常简单，用卷积层代替分类网络中的全连接层。">
+<meta property="og:description" content="评估指标常见评价指标有精度、精确率、召回率、P-R曲线、F1 值、TPR、FPR、ROC、AUC等指标，还有在生物领域常用的敏感性、特异性等指标。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/781c58979f904f4a8f9f2fcc1b8fd57e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/21e775adbf0d437887fe31716099c2f4.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/c50c7c3bebd142d48d93551748d7fcf2.gif#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/d241df84e06e4314a0ffe52a15eb4a88.gif#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/c3b2878c047a49d599dc626a8b30ae6d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_12,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/67e57649e93249488cb3b22d58a265d4.png#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/ada957a8efea4989a4c96c3a57b5ef6f.png#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/fdd748ead141469b9837c157e3d89fe3.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="article:published_time" content="2021-12-30T12:25:20.000Z">
-<meta property="article:modified_time" content="2022-08-29T12:55:00.841Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/w5688414/paddleImage/main/metrics_img/confusion_metric.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/w5688414/paddleImage/main/metrics_img/PRC.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/w5688414/paddleImage/main/metrics_img/AUC.png">
+<meta property="article:published_time" content="2022-08-30T08:40:06.000Z">
+<meta property="article:modified_time" content="2022-08-30T08:47:46.916Z">
 <meta property="article:author" content="CodeCat">
-<meta property="article:tag" content="模型">
-<meta property="article:tag" content="图像分割">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="模型评估">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/781c58979f904f4a8f9f2fcc1b8fd57e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/w5688414/paddleImage/main/metrics_img/confusion_metric.png">
 
-<link rel="canonical" href="http://example.com/2021/12/30/FCN/">
+<link rel="canonical" href="http://example.com/2022/08/30/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/">
 
 
 <script id="page-configurations">
@@ -58,7 +53,7 @@
   };
 </script>
 
-  <title>FCN | CodeCat</title>
+  <title>评估指标 | CodeCat</title>
   
 
 
@@ -202,7 +197,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/30/FCN/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/30/%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/cat.jpg">
@@ -215,7 +210,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          FCN
+          评估指标
         </h1>
 
         <div class="post-meta">
@@ -224,23 +219,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-12-30 20:25:20" itemprop="dateCreated datePublished" datetime="2021-12-30T20:25:20+08:00">2021-12-30</time>
+              <time title="创建时间：2022-08-30 16:40:06 / 修改时间：16:47:46" itemprop="dateCreated datePublished" datetime="2022-08-30T16:40:06+08:00">2022-08-30</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-29 20:55:00" itemprop="dateModified" datetime="2022-08-29T20:55:00+08:00">2022-08-29</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" itemprop="url" rel="index"><span itemprop="name">图像分割</span></a>
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">深度学习基础</span></a>
                 </span>
             </span>
 
@@ -276,30 +265,34 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="FCN论文详解"><a href="#FCN论文详解" class="headerlink" title="FCN论文详解"></a>FCN论文详解</h1><blockquote>
-<p>FCN全卷积网络是图像分割开山之作，其核心思想非常简单，用卷积层代替分类网络中的全连接层。</p>
-</blockquote>
+        <h1 id="评估指标"><a href="#评估指标" class="headerlink" title="评估指标"></a>评估指标</h1><p>常见评价指标有精度、精确率、召回率、P-R曲线、F1 值、TPR、FPR、ROC、AUC等指标，还有在生物领域常用的敏感性、特异性等指标。</p>
 <span id="more"></span>
-<h2 id="1-将全连接层替换为卷积层"><a href="#1-将全连接层替换为卷积层" class="headerlink" title="1. 将全连接层替换为卷积层"></a>1. 将全连接层替换为卷积层</h2><p>语义分割的目的是<strong>对图像中每一个像素点进行分类</strong>，与普通的分类任务只输出图像某个类别不同，<strong>语义分割任务输出的是与输入图像大小相同的图像，输出图像的每个像素对应输入图像每个像素的类别</strong>，这也就是论文中提到的<code>dense prediction</code>。</p>
-<p>FCN全卷积网络是图像分割开山之作，其核心思想非常简单，<strong>用卷积层代替分类网络中的全连接层。</strong><br><img src="https://img-blog.csdnimg.cn/781c58979f904f4a8f9f2fcc1b8fd57e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>用于分类的神经网络由卷积层、池化层和最后连接的全连接层组成，<strong>经过最后的全连接层后，二维的图像信息被映射为具体的一维类别信息进行输出，得到分类标签。</strong></p>
-<p>对于语义分割问题，我们需要的不是具体的类别标签，而是一个二维的分割图，<strong>FCN方法丢弃全连接层，并将其换成卷积层，最后输出与原图相同大小的分割图</strong></p>
-<p><strong>论文作者认为：全连接层让目标的位置信息消失了，只保留了语义信息，而将全连接层更换为卷积层可以同时保留位置信息和语义信息</strong><br><img src="https://img-blog.csdnimg.cn/21e775adbf0d437887fe31716099c2f4.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<h2 id="2-上采样"><a href="#2-上采样" class="headerlink" title="2. 上采样"></a>2. 上采样</h2><p>由于经过<strong>多次卷积之后图像的大小会缩小</strong>，需要通过<strong>上采样</strong>对其进行尺寸大小的恢复，<strong>使最后的分割图与原图尺寸一样</strong></p>
-<h3 id="2-1-反卷积"><a href="#2-1-反卷积" class="headerlink" title="2.1 反卷积"></a>2.1 反卷积</h3><p>下图为<code>stride=1、paddding=0</code>的反卷积的工作过程<br><img src="https://img-blog.csdnimg.cn/c50c7c3bebd142d48d93551748d7fcf2.gif#pic_center" alt="在这里插入图片描述"></p>
-<p>下图为<code>stride=2、padding=1</code>的反卷积的工作过程<br><img src="https://img-blog.csdnimg.cn/d241df84e06e4314a0ffe52a15eb4a88.gif#pic_center" alt="在这里插入图片描述"></p>
-<p>根据<strong>卷积</strong>的尺寸计算公式</p>
-<script type="math/tex; mode=display">o=\frac {i-k+2 \cdot p} {s} + 1</script><p>得<strong>反卷积</strong>的尺寸就算公式为：</p>
-<script type="math/tex; mode=display">i = (o-1) \cdot s + k - 2 \cdot p</script><p><strong>Pytorch实现</strong>：<a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.nn.ConvTranspose2d.html?highlight=nn%20convtranspose2d#torch.nn.ConvTranspose2d">nn.ConvTranspose2d</a></p>
-<h3 id="2-2-插值"><a href="#2-2-插值" class="headerlink" title="2.2 插值"></a>2.2 <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42735631/article/details/117751529">插值</a></h3><h4 id="2-2-1-最近邻插值"><a href="#2-2-1-最近邻插值" class="headerlink" title="2.2.1 最近邻插值"></a>2.2.1 最近邻插值</h4><p><img src="https://img-blog.csdnimg.cn/c3b2878c047a49d599dc626a8b30ae6d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_12,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>计算<strong>P</strong>与<strong>Q11、Q12、Q22、Q21</strong>的<strong>距离</strong>，<strong>可知P与Q11最近，所以P像素点的值与Q11像素点的值一样</strong></p>
-<h4 id="2-2-2-双线性插值"><a href="#2-2-2-双线性插值" class="headerlink" title="2.2.2 双线性插值"></a>2.2.2 双线性插值</h4><p><img src="https://img-blog.csdnimg.cn/67e57649e93249488cb3b22d58a265d4.png#pic_center" alt="在这里插入图片描述"></p>
-<p>双线性插值就是做两次线性变换，先在<strong>X</strong>轴上做一次线性变换，求出每一行的<strong>R</strong>点</p>
-<script type="math/tex; mode=display">R_1=\frac {x_2-x} {x_2-x_1} Q_{11} + \frac {x-x_1} {x_2-x_1}Q_{21} \\ R_2=\frac {x_2-x} {x_2-x_1} Q_{12} + \frac {x-x_1} {x_2-x_1} Q_{22}</script><p>再在<strong>Y</strong>轴上做一次线性变换，求该区域的<strong>P</strong>点</p>
-<script type="math/tex; mode=display">P=\frac {y_2-y} {y_2-y_1}R_1 + \frac {y-y_1} {y_2-y_1}R_2</script><h3 id="2-3-UpPooling"><a href="#2-3-UpPooling" class="headerlink" title="2.3 UpPooling"></a>2.3 <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.nn.MaxUnpool2d.html?highlight=nn%20unpool#torch.nn.MaxUnpool2d">UpPooling</a></h3><p><img src="https://img-blog.csdnimg.cn/ada957a8efea4989a4c96c3a57b5ef6f.png#pic_center" alt="在这里插入图片描述"></p>
-<h3 id="2-4-Upsample"><a href="#2-4-Upsample" class="headerlink" title="2.4 Upsample"></a>2.4 <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.nn.Upsample.html">Upsample</a></h3><h2 id="3-跳跃结构"><a href="#3-跳跃结构" class="headerlink" title="3. 跳跃结构"></a>3. 跳跃结构</h2><p>如果<strong>直接用全卷积后的层进行上采样的话，得到的结果往往不够精细</strong>，所以本文中采取了跳级结构的方法，<strong>将更靠前的卷积层和经过上采样的层相结合</strong>，如下图所示：<br><img src="https://img-blog.csdnimg.cn/fdd748ead141469b9837c157e3d89fe3.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>采用这种方法，能够<strong>在保留全局特征的前提下，尽可能使得图像的划分更为精细</strong></p>
+<h2 id="1-图像分类评估指标"><a href="#1-图像分类评估指标" class="headerlink" title="1. 图像分类评估指标"></a>1. 图像分类评估指标</h2><p>在分类任务中，各指标的计算基础都来自于对正负样本的分类结果，用混淆矩阵表示，如 <strong>图1</strong> 所示：</p>
+<center><img src="https://raw.githubusercontent.com/w5688414/paddleImage/main/metrics_img/confusion_metric.png" width="500" hegiht="" ></center>
+<center><br>图1 混淆矩阵 </br></center>
 
+<h3 id="1-1-精度"><a href="#1-1-精度" class="headerlink" title="1.1 精度"></a>1.1 精度</h3><script type="math/tex; mode=display">Accuracy=\frac{TP+TN}{TP+FN+FP+TN}</script><p>即所有分类正确的样本占全部样本的比例。</p>
+<h3 id="1-2-精确率"><a href="#1-2-精确率" class="headerlink" title="1.2 精确率"></a>1.2 精确率</h3><p>精准率又叫做：Precision、查准率</p>
+<script type="math/tex; mode=display">Precision=\frac{TP}{TP+FP}</script><p>即预测是正例的结果中，确实是正例的比例。</p>
+<h3 id="1-3-召回率"><a href="#1-3-召回率" class="headerlink" title="1.3 召回率"></a>1.3 召回率</h3><p>召回率又叫：Recall、查全率</p>
+<script type="math/tex; mode=display">Recall=\frac{TP}{TP+FN}</script><p>即所有正例的样本中，被找出的比例</p>
+<h3 id="1-4-P-R曲线"><a href="#1-4-P-R曲线" class="headerlink" title="1.4 P-R曲线"></a>1.4 P-R曲线</h3><p>P-R曲线又叫做：PRC</p>
+<center><img src="https://raw.githubusercontent.com/w5688414/paddleImage/main/metrics_img/PRC.png" width="500" hegiht="" ></center>
+<center><br>图2 PRC曲线图</br></center>
+
+<p>根据预测结果将预测样本排序，最有可能为正样本的在前，最不可能的在后，依次将样本预测为正样本，分别计算当前的精确率和召回率，绘制P-R曲线。</p>
+<h3 id="1-5-F1-值"><a href="#1-5-F1-值" class="headerlink" title="1.5 F1 值"></a>1.5 F1 值</h3><script type="math/tex; mode=display">F1=\frac{2 * P * R}{P + R}</script><h3 id="1-6-TPR"><a href="#1-6-TPR" class="headerlink" title="1.6 TPR"></a>1.6 TPR</h3><p>真正例率，与召回率相同</p>
+<script type="math/tex; mode=display">TPR=\frac{TP}{TP+FN}</script><h3 id="1-7-FPR"><a href="#1-7-FPR" class="headerlink" title="1.7 FPR"></a>1.7 FPR</h3><p>假正例率</p>
+<script type="math/tex; mode=display">FPR=\frac{FP}{TN+FP}</script><h3 id="1-8-ROC"><a href="#1-8-ROC" class="headerlink" title="1.8 ROC"></a>1.8 ROC</h3><p>根据预测结果将预测样本排序，最有可能为正样本的在前，最不可能的在后，依次将样本预测为正样本，分别计算当前的TPR和FPR，绘制ROC曲线。</p>
+<h3 id="1-9-AUC"><a href="#1-9-AUC" class="headerlink" title="1.9 AUC"></a>1.9 AUC</h3><p>Area Under ROC Curve，ROC曲线下的面积：</p>
+<center><img src="https://raw.githubusercontent.com/w5688414/paddleImage/main/metrics_img/AUC.png" width="500" hegiht="" ></center>
+<center><br>图3 ROC曲线图</br></center>
+
+<h3 id="1-10-敏感性"><a href="#1-10-敏感性" class="headerlink" title="1.10 敏感性"></a>1.10 敏感性</h3><p>敏感性或者灵敏度（Sensitivity，也称为真阳性率）是指实际为阳性的样本中，判断为阳性的比例（例如真正有生病的人中，被医院判断为有生病者的比例），计算方式是真阳性除以真阳性+假阴性（实际为阳性，但判断为阴性）的比值（能将实际患病的病例正确地判断为患病的能力，即患者被判为阳性的概率）。公式如下：</p>
+<script type="math/tex; mode=display">sensitivity =\frac{TP}{TP + FN}</script><p>即有病（阳性）人群中，检测出阳性的几率。（检测出确实有病的能力）</p>
+<h3 id="1-11-特异性"><a href="#1-11-特异性" class="headerlink" title="1.11 特异性"></a>1.11 特异性</h3><p>特异性或特异度（Specificity，也称为真阴性率）是指实际为阴性的样本中，判断为阴性的比例（例如真正未生病的人中，被医院判断为未生病者的比例），计算方式是真阴性除以真阴性+假阳性（实际为阴性，但判断为阳性）的比值（能正确判断实际未患病的病例的能力，即试验结果为阴性的比例）。公式如下：</p>
+<script type="math/tex; mode=display">specificity =\frac{TN}{TN + FP}</script><p>即无病（阴性）人群中，检测出阴性的几率。（检测出确实没病的能力）</p>
+<h2 id="2-目标检测评估指标"><a href="#2-目标检测评估指标" class="headerlink" title="2. 目标检测评估指标"></a>2. 目标检测评估指标</h2><h2 id="3-图像分割评估指标"><a href="#3-图像分割评估指标" class="headerlink" title="3. 图像分割评估指标"></a>3. 图像分割评估指标</h2><h2 id="4-OCR评估指标"><a href="#4-OCR评估指标" class="headerlink" title="4. OCR评估指标"></a>4. OCR评估指标</h2><h2 id="5-GAN评估指标"><a href="#5-GAN评估指标" class="headerlink" title="5. GAN评估指标"></a>5. GAN评估指标</h2>
     </div>
 
     
@@ -308,8 +301,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%A8%A1%E5%9E%8B/" rel="tag"># 模型</a>
-              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" rel="tag"># 图像分割</a>
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+              <a href="/tags/%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0/" rel="tag"># 模型评估</a>
           </div>
 
         
@@ -318,12 +311,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/12/27/U-Net/" rel="prev" title="U-Net">
-      <i class="fa fa-chevron-left"></i> U-Net
+    <a href="/2022/08/30/%E5%90%91%E9%87%8F%E8%B7%9D%E7%A6%BB%E4%B8%8E%E7%9B%B8%E4%BC%BC%E5%BA%A6/" rel="prev" title="向量距离与相似度">
+      <i class="fa fa-chevron-left"></i> 向量距离与相似度
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/12/31/SegNet/" rel="next" title="SegNet">
-      SegNet <i class="fa fa-chevron-right"></i>
+    <a href="/2022/08/30/Optimizer/" rel="next" title="Optimizer">
+      Optimizer <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -384,7 +377,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FCN%E8%AE%BA%E6%96%87%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">FCN论文详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B0%86%E5%85%A8%E8%BF%9E%E6%8E%A5%E5%B1%82%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%8D%B7%E7%A7%AF%E5%B1%82"><span class="nav-number">1.1.</span> <span class="nav-text">1. 将全连接层替换为卷积层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%8A%E9%87%87%E6%A0%B7"><span class="nav-number">1.2.</span> <span class="nav-text">2. 上采样</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%8F%8D%E5%8D%B7%E7%A7%AF"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 反卷积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%8F%92%E5%80%BC"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 插值</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-%E6%9C%80%E8%BF%91%E9%82%BB%E6%8F%92%E5%80%BC"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">2.2.1 最近邻插值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-%E5%8F%8C%E7%BA%BF%E6%80%A7%E6%8F%92%E5%80%BC"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2.2.2 双线性插值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-UpPooling"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 UpPooling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Upsample"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 Upsample</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%B7%B3%E8%B7%83%E7%BB%93%E6%9E%84"><span class="nav-number">1.3.</span> <span class="nav-text">3. 跳跃结构</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87"><span class="nav-number">1.</span> <span class="nav-text">评估指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87"><span class="nav-number">1.1.</span> <span class="nav-text">1. 图像分类评估指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%B2%BE%E5%BA%A6"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 精度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E7%B2%BE%E7%A1%AE%E7%8E%87"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 精确率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%8F%AC%E5%9B%9E%E7%8E%87"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 召回率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-P-R%E6%9B%B2%E7%BA%BF"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.4 P-R曲线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-F1-%E5%80%BC"><span class="nav-number">1.1.5.</span> <span class="nav-text">1.5 F1 值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-TPR"><span class="nav-number">1.1.6.</span> <span class="nav-text">1.6 TPR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-FPR"><span class="nav-number">1.1.7.</span> <span class="nav-text">1.7 FPR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-8-ROC"><span class="nav-number">1.1.8.</span> <span class="nav-text">1.8 ROC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-9-AUC"><span class="nav-number">1.1.9.</span> <span class="nav-text">1.9 AUC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-10-%E6%95%8F%E6%84%9F%E6%80%A7"><span class="nav-number">1.1.10.</span> <span class="nav-text">1.10 敏感性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-11-%E7%89%B9%E5%BC%82%E6%80%A7"><span class="nav-number">1.1.11.</span> <span class="nav-text">1.11 特异性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87"><span class="nav-number">1.2.</span> <span class="nav-text">2. 目标检测评估指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87"><span class="nav-number">1.3.</span> <span class="nav-text">3. 图像分割评估指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-OCR%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87"><span class="nav-number">1.4.</span> <span class="nav-text">4. OCR评估指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-GAN%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87"><span class="nav-number">1.5.</span> <span class="nav-text">5. GAN评估指标</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -639,7 +632,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'blog_comment',
       owner       : 'codecat0',
       admin       : ['codecat0'],
-      id          : 'df07165ac7fac3ee89c9702e38a6aed8',
+      id          : '576ab79a6bc11101ec4efe4d4b14421c',
         language: '',
       distractionFreeMode: false
     });
