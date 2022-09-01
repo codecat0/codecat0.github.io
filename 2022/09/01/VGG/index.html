@@ -22,30 +22,23 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="FCN论文详解 FCN全卷积网络是图像分割开山之作，其核心思想非常简单，用卷积层代替分类网络中的全连接层。">
+  <meta name="description" content="VGG1. 模型介绍随着AlexNet在2012年的ImageNet大赛上大放异彩后，卷积神经网络进入了飞速发展的阶段。2014年，由Simonyan和Zisserman提出的VGG网络在ImageNet上取得了亚军的成绩。VGG的命名来源于论文作者所在的实验室Visual Geometry Group，其对卷积神经网络进行了改良，探索了网络深度与性能的关系，用更小的卷积核和更深的网络结构，取得了">
 <meta property="og:type" content="article">
-<meta property="og:title" content="FCN">
-<meta property="og:url" content="http://example.com/2021/12/30/FCN/index.html">
+<meta property="og:title" content="VGG">
+<meta property="og:url" content="http://example.com/2022/09/01/VGG/index.html">
 <meta property="og:site_name" content="CodeCat">
-<meta property="og:description" content="FCN论文详解 FCN全卷积网络是图像分割开山之作，其核心思想非常简单，用卷积层代替分类网络中的全连接层。">
+<meta property="og:description" content="VGG1. 模型介绍随着AlexNet在2012年的ImageNet大赛上大放异彩后，卷积神经网络进入了飞速发展的阶段。2014年，由Simonyan和Zisserman提出的VGG网络在ImageNet上取得了亚军的成绩。VGG的命名来源于论文作者所在的实验室Visual Geometry Group，其对卷积神经网络进行了改良，探索了网络深度与性能的关系，用更小的卷积核和更深的网络结构，取得了">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/781c58979f904f4a8f9f2fcc1b8fd57e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/21e775adbf0d437887fe31716099c2f4.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/c50c7c3bebd142d48d93551748d7fcf2.gif#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/d241df84e06e4314a0ffe52a15eb4a88.gif#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/c3b2878c047a49d599dc626a8b30ae6d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_12,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/67e57649e93249488cb3b22d58a265d4.png#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/ada957a8efea4989a4c96c3a57b5ef6f.png#pic_center">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/fdd748ead141469b9837c157e3d89fe3.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
-<meta property="article:published_time" content="2021-12-30T12:25:20.000Z">
-<meta property="article:modified_time" content="2022-08-29T12:55:00.841Z">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6310669a16f2c2beb14bad1d.png">
+<meta property="article:published_time" content="2022-09-01T07:51:00.000Z">
+<meta property="article:modified_time" content="2022-09-01T08:05:52.562Z">
 <meta property="article:author" content="CodeCat">
 <meta property="article:tag" content="模型">
-<meta property="article:tag" content="图像分割">
+<meta property="article:tag" content="backbone">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/781c58979f904f4a8f9f2fcc1b8fd57e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/6310669a16f2c2beb14bad1d.png">
 
-<link rel="canonical" href="http://example.com/2021/12/30/FCN/">
+<link rel="canonical" href="http://example.com/2022/09/01/VGG/">
 
 
 <script id="page-configurations">
@@ -58,7 +51,7 @@
   };
 </script>
 
-  <title>FCN | CodeCat</title>
+  <title>VGG | CodeCat</title>
   
 
 
@@ -202,7 +195,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/30/FCN/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/01/VGG/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/cat.jpg">
@@ -215,7 +208,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          FCN
+          VGG
         </h1>
 
         <div class="post-meta">
@@ -224,23 +217,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-12-30 20:25:20" itemprop="dateCreated datePublished" datetime="2021-12-30T20:25:20+08:00">2021-12-30</time>
+              <time title="创建时间：2022-09-01 15:51:00 / 修改时间：16:05:52" itemprop="dateCreated datePublished" datetime="2022-09-01T15:51:00+08:00">2022-09-01</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-08-29 20:55:00" itemprop="dateModified" datetime="2022-08-29T20:55:00+08:00">2022-08-29</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" itemprop="url" rel="index"><span itemprop="name">图像分割</span></a>
+                  <a href="/categories/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" itemprop="url" rel="index"><span itemprop="name">图像分类</span></a>
                 </span>
             </span>
 
@@ -257,14 +244,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
+              <span>2.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -276,29 +263,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="FCN论文详解"><a href="#FCN论文详解" class="headerlink" title="FCN论文详解"></a>FCN论文详解</h1><blockquote>
-<p>FCN全卷积网络是图像分割开山之作，其核心思想非常简单，用卷积层代替分类网络中的全连接层。</p>
-</blockquote>
+        <h1 id="VGG"><a href="#VGG" class="headerlink" title="VGG"></a><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1409.1556.pdf">VGG</a></h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1. 模型介绍"></a>1. 模型介绍</h2><p>随着AlexNet在2012年的ImageNet大赛上大放异彩后，卷积神经网络进入了飞速发展的阶段。2014年，由Simonyan和Zisserman提出的VGG网络在ImageNet上取得了亚军的成绩。VGG的命名来源于论文作者所在的实验室Visual Geometry Group，其对卷积神经网络进行了改良，探索了网络深度与性能的关系，用更小的卷积核和更深的网络结构，取得了较好的效果，成为了CNN发展史上较为重要的一个网络。VGG中使用了一系列大小为3x3的小尺寸卷积核和池化层构造深度卷积神经网络，因为其结构简单、应用性极强而广受研究者欢迎，尤其是它的网络结构设计方法，为构建深度神经网络提供了方向。</p>
 <span id="more"></span>
-<h2 id="1-将全连接层替换为卷积层"><a href="#1-将全连接层替换为卷积层" class="headerlink" title="1. 将全连接层替换为卷积层"></a>1. 将全连接层替换为卷积层</h2><p>语义分割的目的是<strong>对图像中每一个像素点进行分类</strong>，与普通的分类任务只输出图像某个类别不同，<strong>语义分割任务输出的是与输入图像大小相同的图像，输出图像的每个像素对应输入图像每个像素的类别</strong>，这也就是论文中提到的<code>dense prediction</code>。</p>
-<p>FCN全卷积网络是图像分割开山之作，其核心思想非常简单，<strong>用卷积层代替分类网络中的全连接层。</strong><br><img src="https://img-blog.csdnimg.cn/781c58979f904f4a8f9f2fcc1b8fd57e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>用于分类的神经网络由卷积层、池化层和最后连接的全连接层组成，<strong>经过最后的全连接层后，二维的图像信息被映射为具体的一维类别信息进行输出，得到分类标签。</strong></p>
-<p>对于语义分割问题，我们需要的不是具体的类别标签，而是一个二维的分割图，<strong>FCN方法丢弃全连接层，并将其换成卷积层，最后输出与原图相同大小的分割图</strong></p>
-<p><strong>论文作者认为：全连接层让目标的位置信息消失了，只保留了语义信息，而将全连接层更换为卷积层可以同时保留位置信息和语义信息</strong><br><img src="https://img-blog.csdnimg.cn/21e775adbf0d437887fe31716099c2f4.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<h2 id="2-上采样"><a href="#2-上采样" class="headerlink" title="2. 上采样"></a>2. 上采样</h2><p>由于经过<strong>多次卷积之后图像的大小会缩小</strong>，需要通过<strong>上采样</strong>对其进行尺寸大小的恢复，<strong>使最后的分割图与原图尺寸一样</strong></p>
-<h3 id="2-1-反卷积"><a href="#2-1-反卷积" class="headerlink" title="2.1 反卷积"></a>2.1 反卷积</h3><p>下图为<code>stride=1、paddding=0</code>的反卷积的工作过程<br><img src="https://img-blog.csdnimg.cn/c50c7c3bebd142d48d93551748d7fcf2.gif#pic_center" alt="在这里插入图片描述"></p>
-<p>下图为<code>stride=2、padding=1</code>的反卷积的工作过程<br><img src="https://img-blog.csdnimg.cn/d241df84e06e4314a0ffe52a15eb4a88.gif#pic_center" alt="在这里插入图片描述"></p>
-<p>根据<strong>卷积</strong>的尺寸计算公式</p>
-<script type="math/tex; mode=display">o=\frac {i-k+2 \cdot p} {s} + 1</script><p>得<strong>反卷积</strong>的尺寸就算公式为：</p>
-<script type="math/tex; mode=display">i = (o-1) \cdot s + k - 2 \cdot p</script><p><strong>Pytorch实现</strong>：<a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.nn.ConvTranspose2d.html?highlight=nn%20convtranspose2d#torch.nn.ConvTranspose2d">nn.ConvTranspose2d</a></p>
-<h3 id="2-2-插值"><a href="#2-2-插值" class="headerlink" title="2.2 插值"></a>2.2 <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42735631/article/details/117751529">插值</a></h3><h4 id="2-2-1-最近邻插值"><a href="#2-2-1-最近邻插值" class="headerlink" title="2.2.1 最近邻插值"></a>2.2.1 最近邻插值</h4><p><img src="https://img-blog.csdnimg.cn/c3b2878c047a49d599dc626a8b30ae6d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_12,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>计算<strong>P</strong>与<strong>Q11、Q12、Q22、Q21</strong>的<strong>距离</strong>，<strong>可知P与Q11最近，所以P像素点的值与Q11像素点的值一样</strong></p>
-<h4 id="2-2-2-双线性插值"><a href="#2-2-2-双线性插值" class="headerlink" title="2.2.2 双线性插值"></a>2.2.2 双线性插值</h4><p><img src="https://img-blog.csdnimg.cn/67e57649e93249488cb3b22d58a265d4.png#pic_center" alt="在这里插入图片描述"></p>
-<p>双线性插值就是做两次线性变换，先在<strong>X</strong>轴上做一次线性变换，求出每一行的<strong>R</strong>点</p>
-<script type="math/tex; mode=display">R_1=\frac {x_2-x} {x_2-x_1} Q_{11} + \frac {x-x_1} {x_2-x_1}Q_{21} \\ R_2=\frac {x_2-x} {x_2-x_1} Q_{12} + \frac {x-x_1} {x_2-x_1} Q_{22}</script><p>再在<strong>Y</strong>轴上做一次线性变换，求该区域的<strong>P</strong>点</p>
-<script type="math/tex; mode=display">P=\frac {y_2-y} {y_2-y_1}R_1 + \frac {y-y_1} {y_2-y_1}R_2</script><h3 id="2-3-UpPooling"><a href="#2-3-UpPooling" class="headerlink" title="2.3 UpPooling"></a>2.3 <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.nn.MaxUnpool2d.html?highlight=nn%20unpool#torch.nn.MaxUnpool2d">UpPooling</a></h3><p><img src="https://img-blog.csdnimg.cn/ada957a8efea4989a4c96c3a57b5ef6f.png#pic_center" alt="在这里插入图片描述"></p>
-<h3 id="2-4-Upsample"><a href="#2-4-Upsample" class="headerlink" title="2.4 Upsample"></a>2.4 <a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/generated/torch.nn.Upsample.html">Upsample</a></h3><h2 id="3-跳跃结构"><a href="#3-跳跃结构" class="headerlink" title="3. 跳跃结构"></a>3. 跳跃结构</h2><p>如果<strong>直接用全卷积后的层进行上采样的话，得到的结果往往不够精细</strong>，所以本文中采取了跳级结构的方法，<strong>将更靠前的卷积层和经过上采样的层相结合</strong>，如下图所示：<br><img src="https://img-blog.csdnimg.cn/fdd748ead141469b9837c157e3d89fe3.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
-<p>采用这种方法，能够<strong>在保留全局特征的前提下，尽可能使得图像的划分更为精细</strong></p>
+<h2 id="2-模型结构"><a href="#2-模型结构" class="headerlink" title="2. 模型结构"></a>2. 模型结构</h2><p><img src="https://pic.imgdb.cn/item/6310669a16f2c2beb14bad1d.png" alt=""></p>
+<p>VGG网络的设计严格使用$3×3$的卷积层和池化层来提取特征，并在网络的最后面使用三层全连接层，将最后一层全连接层的输出作为分类的预测。</p>
+<p>VGG中还有一个显著特点：每次经过池化层<code>maxpooling</code>后特征图的尺寸减小一倍，而通道数增加一倍（最后一个池化层除外）。</p>
+<ul>
+<li>特征图的尺寸减小一倍是通过<strong>最大池化</strong></li>
+<li>特征图的通道数增加一倍是通过<strong>池化后的卷积层</strong></li>
+</ul>
+<p>在VGG中每层卷积将使用<code>ReLU</code>作为激活函数，在全连接层之后添加<code>dropout</code>来抑制过拟合。使用小的卷积核能够有效地减少参数的个数，使得训练和测试变得更加有效。比如使用两层$3×3$ 卷积层，可以得到感受野为5的特征图，而比使用$5×5$的卷积层需要更少的参数。由于卷积核比较小，可以堆叠更多的卷积层，加深网络的深度，这对于图像分类任务来说是有利的。VGG模型的成功证明了增加网络的深度，可以更好的学习图像中的特征模式。</p>
+<h2 id="3-模型实现"><a href="#3-模型实现" class="headerlink" title="3. 模型实现"></a>3. 模型实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">VGG</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, features, num_classes=<span class="number">1000</span>, init_weight=<span class="literal">False</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(VGG, self).__init__()</span><br><span class="line">        self.features = features</span><br><span class="line">        self.classifier = nn.Sequential(</span><br><span class="line">            nn.Linear(<span class="number">512</span>*<span class="number">7</span>*<span class="number">7</span>, <span class="number">4096</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(<span class="number">4096</span>, <span class="number">4096</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(<span class="number">4096</span>, num_classes)</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">if</span> init_weight:</span><br><span class="line">            self._init_weights()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.features(x)</span><br><span class="line">        x = torch.flatten(x, start_dim=<span class="number">1</span>)</span><br><span class="line">        x = self.classifier(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_init_weights</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> m <span class="keyword">in</span> self.modules():</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(m, nn.Conv2d):</span><br><span class="line">                nn.init.xavier_normal(m.weight)</span><br><span class="line">                <span class="keyword">if</span> m.bias <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">elif</span> <span class="built_in">isinstance</span>(m, nn.Linear):</span><br><span class="line">                nn.init.xavier_normal(m.weight)</span><br><span class="line">                <span class="keyword">if</span> m.bias <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">make_features</span>(<span class="params">cfgs: <span class="built_in">list</span></span>):</span><br><span class="line">    layers = []</span><br><span class="line">    in_channels = <span class="number">3</span></span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> cfgs:</span><br><span class="line">        <span class="keyword">if</span> v == <span class="string">&#x27;M&#x27;</span>:</span><br><span class="line">            layers += [nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            conv2d = nn.Conv2d(in_channels=in_channels, out_channels=v, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">            layers += [conv2d, nn.ReLU(inplace=<span class="literal">True</span>)]</span><br><span class="line">            in_channels = v</span><br><span class="line">    <span class="keyword">return</span> nn.Sequential(*layers)</span><br><span class="line"></span><br><span class="line"><span class="comment"># key对应于论文的模型</span></span><br><span class="line"><span class="comment"># A -&gt; vgg11</span></span><br><span class="line"><span class="comment"># B -&gt; vgg13</span></span><br><span class="line"><span class="comment"># D -&gt; vgg16</span></span><br><span class="line"><span class="comment"># E -&gt; vgg19</span></span><br><span class="line">cfgs = &#123;</span><br><span class="line">    <span class="string">&quot;A&quot;</span>: [<span class="number">64</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">128</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>],</span><br><span class="line">    <span class="string">&quot;B&quot;</span>: [<span class="number">64</span>, <span class="number">64</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">128</span>, <span class="number">128</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">256</span>, <span class="number">156</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>],</span><br><span class="line">    <span class="string">&quot;D&quot;</span>: [<span class="number">64</span>, <span class="number">64</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">128</span>, <span class="number">128</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>],</span><br><span class="line">    <span class="string">&quot;E&quot;</span>: [<span class="number">64</span>, <span class="number">64</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">128</span>, <span class="number">128</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">vgg</span>(<span class="params">model_name=<span class="string">&#x27;D&#x27;</span>, **kwargs</span>):</span><br><span class="line">    <span class="keyword">assert</span> model_name <span class="keyword">in</span> cfgs, <span class="string">&quot;Warning: model &#123;&#125; not in cfgs dict!!!&quot;</span>.<span class="built_in">format</span>(model_name)</span><br><span class="line">    cfg = cfgs[model_name]</span><br><span class="line"></span><br><span class="line">    model = VGG(make_features(cfg), **kwargs)</span><br><span class="line">    <span class="keyword">return</span> model</span><br></pre></td></tr></table></figure>
+<h2 id="4-模型特点"><a href="#4-模型特点" class="headerlink" title="4. 模型特点"></a>4. 模型特点</h2><ol>
+<li>整个网络都使用了同样大小的卷积核尺寸$3×3$和最大池化尺寸$2×2$</li>
+<li>两个$3×3$的卷积层串联相当于1个$5×5$的卷积层，感受野大小为$5×5$。同样地，3个$3×3$的卷积层串联的效果则相当于1个$7×7$的卷积层。这样的连接方式使得网络参数量更小，而且多层的激活函数令网络对特征的学习能力更强</li>
+</ol>
 
     </div>
 
@@ -309,7 +288,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/%E6%A8%A1%E5%9E%8B/" rel="tag"># 模型</a>
-              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" rel="tag"># 图像分割</a>
+              <a href="/tags/backbone/" rel="tag"># backbone</a>
           </div>
 
         
@@ -318,12 +297,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/12/27/U-Net/" rel="prev" title="U-Net">
-      <i class="fa fa-chevron-left"></i> U-Net
+    <a href="/2022/09/01/AlexNet/" rel="prev" title="AlexNet">
+      <i class="fa fa-chevron-left"></i> AlexNet
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/12/31/SegNet/" rel="next" title="SegNet">
-      SegNet <i class="fa fa-chevron-right"></i>
+    <a href="/2022/09/01/GoogLeNet/" rel="next" title="GoogLeNet">
+      GoogLeNet <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -384,7 +363,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FCN%E8%AE%BA%E6%96%87%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">FCN论文详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B0%86%E5%85%A8%E8%BF%9E%E6%8E%A5%E5%B1%82%E6%9B%BF%E6%8D%A2%E4%B8%BA%E5%8D%B7%E7%A7%AF%E5%B1%82"><span class="nav-number">1.1.</span> <span class="nav-text">1. 将全连接层替换为卷积层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%8A%E9%87%87%E6%A0%B7"><span class="nav-number">1.2.</span> <span class="nav-text">2. 上采样</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%8F%8D%E5%8D%B7%E7%A7%AF"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 反卷积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%8F%92%E5%80%BC"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 插值</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-%E6%9C%80%E8%BF%91%E9%82%BB%E6%8F%92%E5%80%BC"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">2.2.1 最近邻插值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-%E5%8F%8C%E7%BA%BF%E6%80%A7%E6%8F%92%E5%80%BC"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2.2.2 双线性插值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-UpPooling"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 UpPooling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Upsample"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 Upsample</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%B7%B3%E8%B7%83%E7%BB%93%E6%9E%84"><span class="nav-number">1.3.</span> <span class="nav-text">3. 跳跃结构</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VGG"><span class="nav-number">1.</span> <span class="nav-text">VGG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A8%A1%E5%9E%8B%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">1. 模型介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">2. 模型结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A8%A1%E5%9E%8B%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.</span> <span class="nav-text">3. 模型实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%A8%A1%E5%9E%8B%E7%89%B9%E7%82%B9"><span class="nav-number">1.4.</span> <span class="nav-text">4. 模型特点</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -640,7 +619,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'blog_comment',
       owner       : 'codecat0',
       admin       : ['codecat0'],
-      id          : 'df07165ac7fac3ee89c9702e38a6aed8',
+      id          : '9153d176af9b237a72c357a76c77155d',
         language: '',
       distractionFreeMode: false
     });
