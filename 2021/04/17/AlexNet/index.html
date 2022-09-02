@@ -22,23 +22,23 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="VGG1. 模型介绍随着AlexNet在2012年的ImageNet大赛上大放异彩后，卷积神经网络进入了飞速发展的阶段。2014年，由Simonyan和Zisserman提出的VGG网络在ImageNet上取得了亚军的成绩。VGG的命名来源于论文作者所在的实验室Visual Geometry Group，其对卷积神经网络进行了改良，探索了网络深度与性能的关系，用更小的卷积核和更深的网络结构，取得了">
+  <meta name="description" content="AlexNet1. 模型介绍AlexNet是2012年ImageNet竞赛的冠军模型，其作者是神经网络领域三巨头之一的Hinton和他的学生Alex Krizhevsky。 AlexNet以极大的优势领先2012年ImageNet竞赛的第二名，也因此给当时的学术界和工业界带来了很大的冲击。此后，更多更深的神经网络相继被提出，比如优秀的VGG，GoogLeNet，ResNet等。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="VGG">
-<meta property="og:url" content="http://example.com/2022/09/01/VGG/index.html">
+<meta property="og:title" content="AlexNet">
+<meta property="og:url" content="http://example.com/2021/04/17/AlexNet/index.html">
 <meta property="og:site_name" content="CodeCat">
-<meta property="og:description" content="VGG1. 模型介绍随着AlexNet在2012年的ImageNet大赛上大放异彩后，卷积神经网络进入了飞速发展的阶段。2014年，由Simonyan和Zisserman提出的VGG网络在ImageNet上取得了亚军的成绩。VGG的命名来源于论文作者所在的实验室Visual Geometry Group，其对卷积神经网络进行了改良，探索了网络深度与性能的关系，用更小的卷积核和更深的网络结构，取得了">
+<meta property="og:description" content="AlexNet1. 模型介绍AlexNet是2012年ImageNet竞赛的冠军模型，其作者是神经网络领域三巨头之一的Hinton和他的学生Alex Krizhevsky。 AlexNet以极大的优势领先2012年ImageNet竞赛的第二名，也因此给当时的学术界和工业界带来了很大的冲击。此后，更多更深的神经网络相继被提出，比如优秀的VGG，GoogLeNet，ResNet等。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://pic.imgdb.cn/item/6310669a16f2c2beb14bad1d.png">
-<meta property="article:published_time" content="2022-09-01T07:51:00.000Z">
-<meta property="article:modified_time" content="2022-09-01T08:05:52.562Z">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6310606c16f2c2beb146a293.png">
+<meta property="article:published_time" content="2021-04-17T07:33:40.000Z">
+<meta property="article:modified_time" content="2022-09-02T07:43:00.582Z">
 <meta property="article:author" content="CodeCat">
 <meta property="article:tag" content="模型">
 <meta property="article:tag" content="backbone">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://pic.imgdb.cn/item/6310669a16f2c2beb14bad1d.png">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/6310606c16f2c2beb146a293.png">
 
-<link rel="canonical" href="http://example.com/2022/09/01/VGG/">
+<link rel="canonical" href="http://example.com/2021/04/17/AlexNet/">
 
 
 <script id="page-configurations">
@@ -51,7 +51,7 @@
   };
 </script>
 
-  <title>VGG | CodeCat</title>
+  <title>AlexNet | CodeCat</title>
   
 
 
@@ -195,7 +195,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/01/VGG/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/17/AlexNet/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/cat.jpg">
@@ -208,7 +208,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          VGG
+          AlexNet
         </h1>
 
         <div class="post-meta">
@@ -217,10 +217,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-09-01 15:51:00 / 修改时间：16:05:52" itemprop="dateCreated datePublished" datetime="2022-09-01T15:51:00+08:00">2022-09-01</time>
+              <time title="创建时间：2021-04-17 15:33:40" itemprop="dateCreated datePublished" datetime="2021-04-17T15:33:40+08:00">2021-04-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-02 15:43:00" itemprop="dateModified" datetime="2022-09-02T15:43:00+08:00">2022-09-02</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -244,7 +250,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.8k</span>
+              <span>2.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -263,20 +269,27 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="VGG"><a href="#VGG" class="headerlink" title="VGG"></a><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1409.1556.pdf">VGG</a></h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1. 模型介绍"></a>1. 模型介绍</h2><p>随着AlexNet在2012年的ImageNet大赛上大放异彩后，卷积神经网络进入了飞速发展的阶段。2014年，由Simonyan和Zisserman提出的VGG网络在ImageNet上取得了亚军的成绩。VGG的命名来源于论文作者所在的实验室Visual Geometry Group，其对卷积神经网络进行了改良，探索了网络深度与性能的关系，用更小的卷积核和更深的网络结构，取得了较好的效果，成为了CNN发展史上较为重要的一个网络。VGG中使用了一系列大小为3x3的小尺寸卷积核和池化层构造深度卷积神经网络，因为其结构简单、应用性极强而广受研究者欢迎，尤其是它的网络结构设计方法，为构建深度神经网络提供了方向。</p>
+        <h1 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a><a target="_blank" rel="noopener" href="https://www.nvidia.cn/content/tesla/pdf/machine-learning/imagenet-classification-with-deep-convolutional-nn.pdf">AlexNet</a></h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1. 模型介绍"></a>1. 模型介绍</h2><p>AlexNet是2012年ImageNet竞赛的冠军模型，其作者是神经网络领域三巨头之一的Hinton和他的学生Alex Krizhevsky。</p>
+<p>AlexNet以极大的优势领先2012年ImageNet竞赛的第二名，也因此给当时的学术界和工业界带来了很大的冲击。此后，更多更深的神经网络相继被提出，比如优秀的VGG，GoogLeNet，ResNet等。</p>
 <span id="more"></span>
-<h2 id="2-模型结构"><a href="#2-模型结构" class="headerlink" title="2. 模型结构"></a>2. 模型结构</h2><p><img src="https://pic.imgdb.cn/item/6310669a16f2c2beb14bad1d.png" alt=""></p>
-<p>VGG网络的设计严格使用$3×3$的卷积层和池化层来提取特征，并在网络的最后面使用三层全连接层，将最后一层全连接层的输出作为分类的预测。</p>
-<p>VGG中还有一个显著特点：每次经过池化层<code>maxpooling</code>后特征图的尺寸减小一倍，而通道数增加一倍（最后一个池化层除外）。</p>
+<h2 id="2-模型结构"><a href="#2-模型结构" class="headerlink" title="2. 模型结构"></a>2. 模型结构</h2><p><img src="https://pic.imgdb.cn/item/6310606c16f2c2beb146a293.png" alt=""></p>
 <ul>
-<li>特征图的尺寸减小一倍是通过<strong>最大池化</strong></li>
-<li>特征图的通道数增加一倍是通过<strong>池化后的卷积层</strong></li>
+<li>第一模块：对于$224×224$的彩色图像，先用96个$11×11×3$的卷积核对其进行卷积，然后以$2×2$大小进行池化，得到了96个$27×27$大小的特征图</li>
+<li>第二模块：包含256个$5×5$的卷积和$2×2$池化，卷积操作后图像尺寸不变，经过池化后，图像尺寸变成$13×13$</li>
+<li>第三模块：包含384个$3×3$的卷积，卷积操作后图像尺寸不变</li>
+<li>第四模块：包含384个$3×3$的卷积，卷积操作后图像尺寸不变</li>
+<li>第五模块：包含256个$3×3$的卷积和$2×2$的池化，卷积操作后图像尺寸不变，经过池化后变成256个$6×6$大小的特征图</li>
 </ul>
-<p>在VGG中每层卷积将使用<code>ReLU</code>作为激活函数，在全连接层之后添加<code>dropout</code>来抑制过拟合。使用小的卷积核能够有效地减少参数的个数，使得训练和测试变得更加有效。比如使用两层$3×3$ 卷积层，可以得到感受野为5的特征图，而比使用$5×5$的卷积层需要更少的参数。由于卷积核比较小，可以堆叠更多的卷积层，加深网络的深度，这对于图像分类任务来说是有利的。VGG模型的成功证明了增加网络的深度，可以更好的学习图像中的特征模式。</p>
-<h2 id="3-模型实现"><a href="#3-模型实现" class="headerlink" title="3. 模型实现"></a>3. 模型实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">VGG</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, features, num_classes=<span class="number">1000</span>, init_weight=<span class="literal">False</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(VGG, self).__init__()</span><br><span class="line">        self.features = features</span><br><span class="line">        self.classifier = nn.Sequential(</span><br><span class="line">            nn.Linear(<span class="number">512</span>*<span class="number">7</span>*<span class="number">7</span>, <span class="number">4096</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(<span class="number">4096</span>, <span class="number">4096</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(<span class="number">4096</span>, num_classes)</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">if</span> init_weight:</span><br><span class="line">            self._init_weights()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.features(x)</span><br><span class="line">        x = torch.flatten(x, start_dim=<span class="number">1</span>)</span><br><span class="line">        x = self.classifier(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_init_weights</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> m <span class="keyword">in</span> self.modules():</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(m, nn.Conv2d):</span><br><span class="line">                nn.init.xavier_normal(m.weight)</span><br><span class="line">                <span class="keyword">if</span> m.bias <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">elif</span> <span class="built_in">isinstance</span>(m, nn.Linear):</span><br><span class="line">                nn.init.xavier_normal(m.weight)</span><br><span class="line">                <span class="keyword">if</span> m.bias <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">make_features</span>(<span class="params">cfgs: <span class="built_in">list</span></span>):</span><br><span class="line">    layers = []</span><br><span class="line">    in_channels = <span class="number">3</span></span><br><span class="line">    <span class="keyword">for</span> v <span class="keyword">in</span> cfgs:</span><br><span class="line">        <span class="keyword">if</span> v == <span class="string">&#x27;M&#x27;</span>:</span><br><span class="line">            layers += [nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            conv2d = nn.Conv2d(in_channels=in_channels, out_channels=v, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">            layers += [conv2d, nn.ReLU(inplace=<span class="literal">True</span>)]</span><br><span class="line">            in_channels = v</span><br><span class="line">    <span class="keyword">return</span> nn.Sequential(*layers)</span><br><span class="line"></span><br><span class="line"><span class="comment"># key对应于论文的模型</span></span><br><span class="line"><span class="comment"># A -&gt; vgg11</span></span><br><span class="line"><span class="comment"># B -&gt; vgg13</span></span><br><span class="line"><span class="comment"># D -&gt; vgg16</span></span><br><span class="line"><span class="comment"># E -&gt; vgg19</span></span><br><span class="line">cfgs = &#123;</span><br><span class="line">    <span class="string">&quot;A&quot;</span>: [<span class="number">64</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">128</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>],</span><br><span class="line">    <span class="string">&quot;B&quot;</span>: [<span class="number">64</span>, <span class="number">64</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">128</span>, <span class="number">128</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">256</span>, <span class="number">156</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>],</span><br><span class="line">    <span class="string">&quot;D&quot;</span>: [<span class="number">64</span>, <span class="number">64</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">128</span>, <span class="number">128</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>],</span><br><span class="line">    <span class="string">&quot;E&quot;</span>: [<span class="number">64</span>, <span class="number">64</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">128</span>, <span class="number">128</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">vgg</span>(<span class="params">model_name=<span class="string">&#x27;D&#x27;</span>, **kwargs</span>):</span><br><span class="line">    <span class="keyword">assert</span> model_name <span class="keyword">in</span> cfgs, <span class="string">&quot;Warning: model &#123;&#125; not in cfgs dict!!!&quot;</span>.<span class="built_in">format</span>(model_name)</span><br><span class="line">    cfg = cfgs[model_name]</span><br><span class="line"></span><br><span class="line">    model = VGG(make_features(cfg), **kwargs)</span><br><span class="line">    <span class="keyword">return</span> model</span><br></pre></td></tr></table></figure>
-<h2 id="4-模型特点"><a href="#4-模型特点" class="headerlink" title="4. 模型特点"></a>4. 模型特点</h2><ol>
-<li>整个网络都使用了同样大小的卷积核尺寸$3×3$和最大池化尺寸$2×2$</li>
-<li>两个$3×3$的卷积层串联相当于1个$5×5$的卷积层，感受野大小为$5×5$。同样地，3个$3×3$的卷积层串联的效果则相当于1个$7×7$的卷积层。这样的连接方式使得网络参数量更小，而且多层的激活函数令网络对特征的学习能力更强</li>
+<p>将经过第5次卷积提取到的特征图输入到全连接层，得到原始图像的向量表达。前两个全连接层的输出神经元的个数是4096，第三个全连接层的输出神经元个数是分类标签的类别数（ImageNet比赛的分类类别数是1000），然后使用Softmax激活函数即可计算出每个类别的预测概率。</p>
+<h2 id="3-模型实现"><a href="#3-模型实现" class="headerlink" title="3. 模型实现"></a>3. 模型实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AlexNet</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_classes=<span class="number">1000</span>, init_weight=<span class="literal">False</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(AlexNet, self).__init__()</span><br><span class="line">        self.feature_extraction = nn.Sequential(</span><br><span class="line">            <span class="comment"># [3, 224, 224] -&gt; [96, 55, 55]</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">3</span>, out_channels=<span class="number">96</span>, kernel_size=(<span class="number">11</span>, <span class="number">11</span>), stride=(<span class="number">4</span>, <span class="number">4</span>), padding=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            <span class="comment"># [96, 55, 55] -&gt; [96, 27, 27]</span></span><br><span class="line">            nn.MaxPool2d(kernel_size=(<span class="number">3</span>, <span class="number">3</span>), stride=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [96, 27, 27] -&gt; [256, 27, 27] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">96</span>, out_channels=<span class="number">256</span>, kernel_size=(<span class="number">5</span>, <span class="number">5</span>), padding=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            <span class="comment"># [256, 27, 27] -&gt; [256, 13, 13]</span></span><br><span class="line">            nn.MaxPool2d(kernel_size=(<span class="number">3</span>, <span class="number">3</span>), stride=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [256, 13, 13] -&gt; [384, 13, 13] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">256</span>, out_channels=<span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">3</span>), padding=(<span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [384, 13, 13] -&gt; [384, 13, 13] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">384</span>, out_channels=<span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">3</span>), padding=(<span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [384, 13, 13] -&gt; [256, 13, 13] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">384</span>, out_channels=<span class="number">256</span>, kernel_size=(<span class="number">3</span>, <span class="number">3</span>), padding=(<span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            <span class="comment"># [256, 13, 13] -&gt; [256, 6, 6]</span></span><br><span class="line">            nn.MaxPool2d(kernel_size=(<span class="number">3</span>, <span class="number">3</span>), stride=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line">        )</span><br><span class="line">        self.classifier = nn.Sequential(</span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(in_features=<span class="number">256</span>*<span class="number">6</span>*<span class="number">6</span>, out_features=<span class="number">4096</span>),</span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(in_features=<span class="number">4096</span>, out_features=<span class="number">4096</span>),</span><br><span class="line">            nn.Linear(in_features=<span class="number">4096</span>, out_features=num_classes),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.feature_extraction(x)</span><br><span class="line">        x = torch.flatten(x, start_dim=<span class="number">1</span>)</span><br><span class="line">        x = self.classifier(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_initialize_weight</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> m <span class="keyword">in</span> self.modules():</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(m, nn.Conv2d):</span><br><span class="line">                nn.init.kaiming_normal_(m.weight, mode=<span class="string">&#x27;fan_out&#x27;</span>, nonlinearity=<span class="string">&#x27;relu&#x27;</span>)</span><br><span class="line">                <span class="keyword">if</span> m.bias <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">elif</span> <span class="built_in">isinstance</span>(m, nn.Linear):</span><br><span class="line">                nn.init.normal_(m.weight, <span class="number">0</span>, <span class="number">0.01</span>)</span><br><span class="line">                nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="4-模型特点"><a href="#4-模型特点" class="headerlink" title="4. 模型特点"></a>4. 模型特点</h2><p>AlexNet中包含了几个比较新的技术点，也首次在CNN中成功应用了ReLU、Dropout和LRN等Trick。同时AlexNet也使用了GPU进行运算加速。</p>
+<ol>
+<li>成功使用<strong>ReLU</strong>作为CNN的激活函数，并验证其效果在较深的网络超过了Sigmoid，成功解决了Sigmoid在网络较深时的梯度弥散问题。</li>
+<li>训练时使用<strong>Dropout</strong>随机忽略一部分神经元，以避免模型过拟合。</li>
+<li>在CNN中使用重叠的<strong>最大池化</strong>。此前CNN中普遍使用平均池化，AlexNet全部使用最大池化，避免平均池化的模糊化效果。</li>
+<li>提出了<strong>LRN局部响应归一化层</strong>，对局部神经元的活动创建竞争机制，使得其中响应比较大的值变得相对更大，并抑制其他反馈较小的神经元，增强了模型的泛化能力。</li>
+<li>使用<strong>CUDA</strong>加速深度卷积网络的训练，利用GPU强大的并行计算能力，处理神经网络训练时大量的矩阵运算。</li>
+<li>使用<strong>数据增强</strong>，随机地从$256×256$大小的原始图像中截取$224×224$大小的区域（以及水平翻转的镜像），相当于增加了$2×(256−224)^2=2048$倍的数据量。如果没有数据增强，仅靠原始的数据量，参数众多的CNN会陷入过拟合中，使用了数据增强后可以大大减轻过拟合，提升泛化能力。</li>
 </ol>
 
     </div>
@@ -296,13 +309,10 @@
 
         
     <div class="post-nav">
+      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2022/09/01/AlexNet/" rel="prev" title="AlexNet">
-      <i class="fa fa-chevron-left"></i> AlexNet
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/09/01/GoogLeNet/" rel="next" title="GoogLeNet">
-      GoogLeNet <i class="fa fa-chevron-right"></i>
+    <a href="/2021/04/23/VGG/" rel="next" title="VGG">
+      VGG <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -363,7 +373,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VGG"><span class="nav-number">1.</span> <span class="nav-text">VGG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A8%A1%E5%9E%8B%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">1. 模型介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">2. 模型结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A8%A1%E5%9E%8B%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.</span> <span class="nav-text">3. 模型实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%A8%A1%E5%9E%8B%E7%89%B9%E7%82%B9"><span class="nav-number">1.4.</span> <span class="nav-text">4. 模型特点</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AlexNet"><span class="nav-number">1.</span> <span class="nav-text">AlexNet</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A8%A1%E5%9E%8B%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">1. 模型介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">2. 模型结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A8%A1%E5%9E%8B%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.</span> <span class="nav-text">3. 模型实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%A8%A1%E5%9E%8B%E7%89%B9%E7%82%B9"><span class="nav-number">1.4.</span> <span class="nav-text">4. 模型特点</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -379,7 +389,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -392,7 +402,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -459,12 +469,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">57k</span>
+    <span title="站点总字数">76k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">52 分钟</span>
+    <span title="站点阅读时长">1:09</span>
 </div>
 
 <!--
@@ -619,7 +629,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'blog_comment',
       owner       : 'codecat0',
       admin       : ['codecat0'],
-      id          : '9153d176af9b237a72c357a76c77155d',
+      id          : 'f7bcff7a52fda87f85c4607aa7e3bad1',
         language: '',
       distractionFreeMode: false
     });
