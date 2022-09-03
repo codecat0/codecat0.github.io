@@ -1,40 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>AlexNet</title>
-    <url>/2021/04/17/AlexNet/</url>
-    <content><![CDATA[<h1 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a><a href="https://www.nvidia.cn/content/tesla/pdf/machine-learning/imagenet-classification-with-deep-convolutional-nn.pdf">AlexNet</a></h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1. 模型介绍"></a>1. 模型介绍</h2><p>AlexNet是2012年ImageNet竞赛的冠军模型，其作者是神经网络领域三巨头之一的Hinton和他的学生Alex Krizhevsky。</p>
-<p>AlexNet以极大的优势领先2012年ImageNet竞赛的第二名，也因此给当时的学术界和工业界带来了很大的冲击。此后，更多更深的神经网络相继被提出，比如优秀的VGG，GoogLeNet，ResNet等。</p>
-<span id="more"></span>
-<h2 id="2-模型结构"><a href="#2-模型结构" class="headerlink" title="2. 模型结构"></a>2. 模型结构</h2><p><img src="https://pic.imgdb.cn/item/6310606c16f2c2beb146a293.png" alt=""></p>
-<ul>
-<li>第一模块：对于$224×224$的彩色图像，先用96个$11×11×3$的卷积核对其进行卷积，然后以$2×2$大小进行池化，得到了96个$27×27$大小的特征图</li>
-<li>第二模块：包含256个$5×5$的卷积和$2×2$池化，卷积操作后图像尺寸不变，经过池化后，图像尺寸变成$13×13$</li>
-<li>第三模块：包含384个$3×3$的卷积，卷积操作后图像尺寸不变</li>
-<li>第四模块：包含384个$3×3$的卷积，卷积操作后图像尺寸不变</li>
-<li>第五模块：包含256个$3×3$的卷积和$2×2$的池化，卷积操作后图像尺寸不变，经过池化后变成256个$6×6$大小的特征图</li>
-</ul>
-<p>将经过第5次卷积提取到的特征图输入到全连接层，得到原始图像的向量表达。前两个全连接层的输出神经元的个数是4096，第三个全连接层的输出神经元个数是分类标签的类别数（ImageNet比赛的分类类别数是1000），然后使用Softmax激活函数即可计算出每个类别的预测概率。</p>
-<h2 id="3-模型实现"><a href="#3-模型实现" class="headerlink" title="3. 模型实现"></a>3. 模型实现</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AlexNet</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_classes=<span class="number">1000</span>, init_weight=<span class="literal">False</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(AlexNet, self).__init__()</span><br><span class="line">        self.feature_extraction = nn.Sequential(</span><br><span class="line">            <span class="comment"># [3, 224, 224] -&gt; [96, 55, 55]</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">3</span>, out_channels=<span class="number">96</span>, kernel_size=(<span class="number">11</span>, <span class="number">11</span>), stride=(<span class="number">4</span>, <span class="number">4</span>), padding=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            <span class="comment"># [96, 55, 55] -&gt; [96, 27, 27]</span></span><br><span class="line">            nn.MaxPool2d(kernel_size=(<span class="number">3</span>, <span class="number">3</span>), stride=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [96, 27, 27] -&gt; [256, 27, 27] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">96</span>, out_channels=<span class="number">256</span>, kernel_size=(<span class="number">5</span>, <span class="number">5</span>), padding=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            <span class="comment"># [256, 27, 27] -&gt; [256, 13, 13]</span></span><br><span class="line">            nn.MaxPool2d(kernel_size=(<span class="number">3</span>, <span class="number">3</span>), stride=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [256, 13, 13] -&gt; [384, 13, 13] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">256</span>, out_channels=<span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">3</span>), padding=(<span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [384, 13, 13] -&gt; [384, 13, 13] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">384</span>, out_channels=<span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">3</span>), padding=(<span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [384, 13, 13] -&gt; [256, 13, 13] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">384</span>, out_channels=<span class="number">256</span>, kernel_size=(<span class="number">3</span>, <span class="number">3</span>), padding=(<span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            <span class="comment"># [256, 13, 13] -&gt; [256, 6, 6]</span></span><br><span class="line">            nn.MaxPool2d(kernel_size=(<span class="number">3</span>, <span class="number">3</span>), stride=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line">        )</span><br><span class="line">        self.classifier = nn.Sequential(</span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(in_features=<span class="number">256</span>*<span class="number">6</span>*<span class="number">6</span>, out_features=<span class="number">4096</span>),</span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(in_features=<span class="number">4096</span>, out_features=<span class="number">4096</span>),</span><br><span class="line">            nn.Linear(in_features=<span class="number">4096</span>, out_features=num_classes),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.feature_extraction(x)</span><br><span class="line">        x = torch.flatten(x, start_dim=<span class="number">1</span>)</span><br><span class="line">        x = self.classifier(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_initialize_weight</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> m <span class="keyword">in</span> self.modules():</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(m, nn.Conv2d):</span><br><span class="line">                nn.init.kaiming_normal_(m.weight, mode=<span class="string">&#x27;fan_out&#x27;</span>, nonlinearity=<span class="string">&#x27;relu&#x27;</span>)</span><br><span class="line">                <span class="keyword">if</span> m.bias <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">elif</span> <span class="built_in">isinstance</span>(m, nn.Linear):</span><br><span class="line">                nn.init.normal_(m.weight, <span class="number">0</span>, <span class="number">0.01</span>)</span><br><span class="line">                nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="4-模型特点"><a href="#4-模型特点" class="headerlink" title="4. 模型特点"></a>4. 模型特点</h2><p>AlexNet中包含了几个比较新的技术点，也首次在CNN中成功应用了ReLU、Dropout和LRN等Trick。同时AlexNet也使用了GPU进行运算加速。</p>
-<ol>
-<li>成功使用<strong>ReLU</strong>作为CNN的激活函数，并验证其效果在较深的网络超过了Sigmoid，成功解决了Sigmoid在网络较深时的梯度弥散问题。</li>
-<li>训练时使用<strong>Dropout</strong>随机忽略一部分神经元，以避免模型过拟合。</li>
-<li>在CNN中使用重叠的<strong>最大池化</strong>。此前CNN中普遍使用平均池化，AlexNet全部使用最大池化，避免平均池化的模糊化效果。</li>
-<li>提出了<strong>LRN局部响应归一化层</strong>，对局部神经元的活动创建竞争机制，使得其中响应比较大的值变得相对更大，并抑制其他反馈较小的神经元，增强了模型的泛化能力。</li>
-<li>使用<strong>CUDA</strong>加速深度卷积网络的训练，利用GPU强大的并行计算能力，处理神经网络训练时大量的矩阵运算。</li>
-<li>使用<strong>数据增强</strong>，随机地从$256×256$大小的原始图像中截取$224×224$大小的区域（以及水平翻转的镜像），相当于增加了$2×(256−224)^2=2048$倍的数据量。如果没有数据增强，仅靠原始的数据量，参数众多的CNN会陷入过拟合中，使用了数据增强后可以大大减轻过拟合，提升泛化能力。</li>
-</ol>
-]]></content>
-      <categories>
-        <category>图像分类</category>
-      </categories>
-      <tags>
-        <tag>模型</tag>
-        <tag>backbone</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Activation</title>
     <url>/2022/08/30/Activation/</url>
     <content><![CDATA[<h1 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h1><p>如果不用激活函数，每一层输出都是上层输入的线性函数，无论神经网络有多少层，最终的输出都是输入的线性组合。<br>激活函数给神经元引入了非线性因素，使得神经网络可以任意逼近任何非线性函数。<br><span id="more"></span></p>
@@ -208,6 +174,40 @@ y_i=soft\max \left( x_i \right) =\frac{e^{x_i}}{\sum_{j=1}^k{e^{x_j}}}</script><
       </tags>
   </entry>
   <entry>
+    <title>AlexNet</title>
+    <url>/2021/04/17/AlexNet/</url>
+    <content><![CDATA[<h1 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a><a href="https://www.nvidia.cn/content/tesla/pdf/machine-learning/imagenet-classification-with-deep-convolutional-nn.pdf">AlexNet</a></h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1. 模型介绍"></a>1. 模型介绍</h2><p>AlexNet是2012年ImageNet竞赛的冠军模型，其作者是神经网络领域三巨头之一的Hinton和他的学生Alex Krizhevsky。</p>
+<p>AlexNet以极大的优势领先2012年ImageNet竞赛的第二名，也因此给当时的学术界和工业界带来了很大的冲击。此后，更多更深的神经网络相继被提出，比如优秀的VGG，GoogLeNet，ResNet等。</p>
+<span id="more"></span>
+<h2 id="2-模型结构"><a href="#2-模型结构" class="headerlink" title="2. 模型结构"></a>2. 模型结构</h2><p><img src="https://pic.imgdb.cn/item/6310606c16f2c2beb146a293.png" alt=""></p>
+<ul>
+<li>第一模块：对于$224×224$的彩色图像，先用96个$11×11×3$的卷积核对其进行卷积，然后以$2×2$大小进行池化，得到了96个$27×27$大小的特征图</li>
+<li>第二模块：包含256个$5×5$的卷积和$2×2$池化，卷积操作后图像尺寸不变，经过池化后，图像尺寸变成$13×13$</li>
+<li>第三模块：包含384个$3×3$的卷积，卷积操作后图像尺寸不变</li>
+<li>第四模块：包含384个$3×3$的卷积，卷积操作后图像尺寸不变</li>
+<li>第五模块：包含256个$3×3$的卷积和$2×2$的池化，卷积操作后图像尺寸不变，经过池化后变成256个$6×6$大小的特征图</li>
+</ul>
+<p>将经过第5次卷积提取到的特征图输入到全连接层，得到原始图像的向量表达。前两个全连接层的输出神经元的个数是4096，第三个全连接层的输出神经元个数是分类标签的类别数（ImageNet比赛的分类类别数是1000），然后使用Softmax激活函数即可计算出每个类别的预测概率。</p>
+<h2 id="3-模型实现"><a href="#3-模型实现" class="headerlink" title="3. 模型实现"></a>3. 模型实现</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AlexNet</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_classes=<span class="number">1000</span>, init_weight=<span class="literal">False</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(AlexNet, self).__init__()</span><br><span class="line">        self.feature_extraction = nn.Sequential(</span><br><span class="line">            <span class="comment"># [3, 224, 224] -&gt; [96, 55, 55]</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">3</span>, out_channels=<span class="number">96</span>, kernel_size=(<span class="number">11</span>, <span class="number">11</span>), stride=(<span class="number">4</span>, <span class="number">4</span>), padding=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            <span class="comment"># [96, 55, 55] -&gt; [96, 27, 27]</span></span><br><span class="line">            nn.MaxPool2d(kernel_size=(<span class="number">3</span>, <span class="number">3</span>), stride=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [96, 27, 27] -&gt; [256, 27, 27] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">96</span>, out_channels=<span class="number">256</span>, kernel_size=(<span class="number">5</span>, <span class="number">5</span>), padding=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            <span class="comment"># [256, 27, 27] -&gt; [256, 13, 13]</span></span><br><span class="line">            nn.MaxPool2d(kernel_size=(<span class="number">3</span>, <span class="number">3</span>), stride=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [256, 13, 13] -&gt; [384, 13, 13] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">256</span>, out_channels=<span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">3</span>), padding=(<span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [384, 13, 13] -&gt; [384, 13, 13] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">384</span>, out_channels=<span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">3</span>), padding=(<span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># [384, 13, 13] -&gt; [256, 13, 13] same padding</span></span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">384</span>, out_channels=<span class="number">256</span>, kernel_size=(<span class="number">3</span>, <span class="number">3</span>), padding=(<span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            <span class="comment"># [256, 13, 13] -&gt; [256, 6, 6]</span></span><br><span class="line">            nn.MaxPool2d(kernel_size=(<span class="number">3</span>, <span class="number">3</span>), stride=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line">        )</span><br><span class="line">        self.classifier = nn.Sequential(</span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(in_features=<span class="number">256</span>*<span class="number">6</span>*<span class="number">6</span>, out_features=<span class="number">4096</span>),</span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(in_features=<span class="number">4096</span>, out_features=<span class="number">4096</span>),</span><br><span class="line">            nn.Linear(in_features=<span class="number">4096</span>, out_features=num_classes),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.feature_extraction(x)</span><br><span class="line">        x = torch.flatten(x, start_dim=<span class="number">1</span>)</span><br><span class="line">        x = self.classifier(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_initialize_weight</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">for</span> m <span class="keyword">in</span> self.modules():</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(m, nn.Conv2d):</span><br><span class="line">                nn.init.kaiming_normal_(m.weight, mode=<span class="string">&#x27;fan_out&#x27;</span>, nonlinearity=<span class="string">&#x27;relu&#x27;</span>)</span><br><span class="line">                <span class="keyword">if</span> m.bias <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">elif</span> <span class="built_in">isinstance</span>(m, nn.Linear):</span><br><span class="line">                nn.init.normal_(m.weight, <span class="number">0</span>, <span class="number">0.01</span>)</span><br><span class="line">                nn.init.constant_(m.bias, <span class="number">0</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="4-模型特点"><a href="#4-模型特点" class="headerlink" title="4. 模型特点"></a>4. 模型特点</h2><p>AlexNet中包含了几个比较新的技术点，也首次在CNN中成功应用了ReLU、Dropout和LRN等Trick。同时AlexNet也使用了GPU进行运算加速。</p>
+<ol>
+<li>成功使用<strong>ReLU</strong>作为CNN的激活函数，并验证其效果在较深的网络超过了Sigmoid，成功解决了Sigmoid在网络较深时的梯度弥散问题。</li>
+<li>训练时使用<strong>Dropout</strong>随机忽略一部分神经元，以避免模型过拟合。</li>
+<li>在CNN中使用重叠的<strong>最大池化</strong>。此前CNN中普遍使用平均池化，AlexNet全部使用最大池化，避免平均池化的模糊化效果。</li>
+<li>提出了<strong>LRN局部响应归一化层</strong>，对局部神经元的活动创建竞争机制，使得其中响应比较大的值变得相对更大，并抑制其他反馈较小的神经元，增强了模型的泛化能力。</li>
+<li>使用<strong>CUDA</strong>加速深度卷积网络的训练，利用GPU强大的并行计算能力，处理神经网络训练时大量的矩阵运算。</li>
+<li>使用<strong>数据增强</strong>，随机地从$256×256$大小的原始图像中截取$224×224$大小的区域（以及水平翻转的镜像），相当于增加了$2×(256−224)^2=2048$倍的数据量。如果没有数据增强，仅靠原始的数据量，参数众多的CNN会陷入过拟合中，使用了数据增强后可以大大减轻过拟合，提升泛化能力。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>图像分类</category>
+      </categories>
+      <tags>
+        <tag>模型</tag>
+        <tag>backbone</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>DeepLab</title>
     <url>/2022/06/17/DeepLab/</url>
     <content><![CDATA[<h1 id="DeepLab系列"><a href="#DeepLab系列" class="headerlink" title="DeepLab系列"></a>DeepLab系列</h1><blockquote>
@@ -361,6 +361,189 @@ y_i=soft\max \left( x_i \right) =\frac{e^{x_i}}{\sum_{j=1}^k{e^{x_j}}}</script><
       </tags>
   </entry>
   <entry>
+    <title>GhostNet</title>
+    <url>/2021/10/31/GhostNet/</url>
+    <content><![CDATA[<h1 id="Ghost-Net"><a href="#Ghost-Net" class="headerlink" title="Ghost Net"></a><a href="https://arxiv.org/pdf/1911.11907">Ghost Net</a></h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1. 模型介绍"></a>1. 模型介绍</h2><p>下图是由ResNet-50中的第一个残差块生成的某些中间特征图的可视化。从图中我们可以看出，这里面有很多特征图是具有高度相似性的（在图中分别用不同的颜色示意），换句话说，就是存在许多的冗余特征图。所以从另一个角度想，我们是不是可以利用一系列的线性变化，以很小的代价生成许多能从原始特征发掘所需信息的“幻影”特征图呢？这个便是整篇文章的核心思想。</p>
+<p><img src="https://img-blog.csdnimg.cn/59beb0d06e2b405b8189693edb871e1c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="2-模型结构及实现"><a href="#2-模型结构及实现" class="headerlink" title="2. 模型结构及实现"></a>2. 模型结构及实现</h2><p><img src="https://img-blog.csdnimg.cn/b643dd29226143d3915daeb987d2927d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p><strong>Ghost module：</strong></p>
+<ol>
+<li>先通过<code>conv</code>生成一些特征图</li>
+<li>然后对生成的特征图进行<code>cheap</code>操作（Dwise conv）生成冗余特征图</li>
+<li>最后将<code>conv</code>生成的特征图与<code>cheap</code>操作生成的特征图进行<code>concat</code>操作</li>
+</ol>
+<h3 id="2-1-Ghost-Bottlenecks"><a href="#2-1-Ghost-Bottlenecks" class="headerlink" title="2.1 Ghost Bottlenecks"></a>2.1 Ghost Bottlenecks</h3><p><img src="https://img-blog.csdnimg.cn/74b247252f90447cbc1011bc6863b3d5.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>第一层<code>Ghost module</code>充当<strong>扩展层</strong>用于增加通道的数目</p>
+<p>第二层<code>Ghost module</code>减少通道的数目来满足<code>shortcut path</code></p>
+<h3 id="2-2-网络结构"><a href="#2-2-网络结构" class="headerlink" title="2.2 网络结构"></a>2.2 网络结构</h3><p><img src="https://img-blog.csdnimg.cn/e674e7de20d44360b0d5da8ca51ed067.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>代码实现：<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DWConv3x3BNReLU</span>(nn.Sequential):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channel, out_channel, stride, groups</span>):</span><br><span class="line">        <span class="built_in">super</span>(DWConv3x3BNReLU, self).__init__(</span><br><span class="line">            nn.Conv2d(in_channels=in_channel, out_channels=out_channel, kernel_size=<span class="number">3</span>, stride=stride, padding=<span class="number">1</span>, groups=groups, bias=<span class="literal">False</span>),</span><br><span class="line">            nn.BatchNorm2d(out_channel),</span><br><span class="line">            nn.ReLU6(inplace=<span class="literal">True</span>),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SqueezeAndExcite</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channel, out_channel, divide=<span class="number">4</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(SqueezeAndExcite, self).__init__()</span><br><span class="line">        mid_channel = in_channel // divide</span><br><span class="line">        self.pool = nn.AdaptiveAvgPool2d((<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">        self.SEblock = nn.Sequential(</span><br><span class="line">            nn.Linear(in_features=in_channel, out_features=mid_channel),</span><br><span class="line">            nn.ReLU6(inplace=<span class="literal">True</span>),</span><br><span class="line">            nn.Linear(in_features=mid_channel, out_features=out_channel),</span><br><span class="line">            nn.ReLU6(inplace=<span class="literal">True</span>),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        b, c, h, w = x.size()</span><br><span class="line">        out = self.pool(x)</span><br><span class="line">        out = torch.flatten(out, start_dim=<span class="number">1</span>)</span><br><span class="line">        out = self.SEblock(out)</span><br><span class="line">        out = out.view(b, c, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> out * x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GhostModule</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channel, out_channel, s=<span class="number">2</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, use_relu=<span class="literal">True</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(GhostModule, self).__init__()</span><br><span class="line">        intrinsic_channel = out_channel // s</span><br><span class="line">        ghost_channel = intrinsic_channel * (s - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        self.primary_conv = nn.Sequential(</span><br><span class="line">            nn.Conv2d(in_channels=in_channel, out_channels=intrinsic_channel, kernel_size=kernel_size, stride=stride, padding=(kernel_size-<span class="number">1</span>)//<span class="number">2</span>, bias=<span class="literal">False</span>),</span><br><span class="line">            nn.BatchNorm2d(intrinsic_channel),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>) <span class="keyword">if</span> use_relu <span class="keyword">else</span> nn.Sequential()</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        self.cheap_op = DWConv3x3BNReLU(in_channel=intrinsic_channel, out_channel=ghost_channel, stride=stride, groups=intrinsic_channel)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x1 = self.primary_conv(x)</span><br><span class="line">        x2 = self.cheap_op(x1)</span><br><span class="line">        out = torch.cat([x1, x2], dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GhostBottleneck</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channel, mid_channel, out_channel, kernel_size, stride, use_se</span>):</span><br><span class="line">        <span class="built_in">super</span>(GhostBottleneck, self).__init__()</span><br><span class="line">        self.stride = stride</span><br><span class="line"></span><br><span class="line">        self.bottleneck = nn.Sequential(</span><br><span class="line">            GhostModule(in_channel=in_channel, out_channel=mid_channel, use_relu=<span class="literal">True</span>),</span><br><span class="line">            DWConv3x3BNReLU(in_channel=mid_channel, out_channel=mid_channel, stride=stride, groups=mid_channel) <span class="keyword">if</span> self.stride &gt; <span class="number">1</span> <span class="keyword">else</span> nn.Sequential(),</span><br><span class="line">            SqueezeAndExcite(in_channel=mid_channel, out_channel=mid_channel) <span class="keyword">if</span> use_se <span class="keyword">else</span> nn.Sequential(),</span><br><span class="line">            GhostModule(in_channel=mid_channel, out_channel=out_channel, use_relu=<span class="literal">False</span>)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.stride &gt; <span class="number">1</span>:</span><br><span class="line">            self.shortcut = DWConv3x3BNReLU(in_channel=in_channel, out_channel=out_channel, stride=stride, groups=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.shortcut = nn.Conv2d(in_channels=in_channel, out_channels=out_channel, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        out = self.bottleneck(x)</span><br><span class="line">        residual = self.shortcut(x)</span><br><span class="line">        out += residual</span><br><span class="line">        <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GhostNet</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_classes=<span class="number">1000</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(GhostNet, self).__init__()</span><br><span class="line"></span><br><span class="line">        self.first_conv = nn.Sequential(</span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">3</span>, out_channels=<span class="number">16</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>, bias=<span class="literal">False</span>),</span><br><span class="line">            nn.BatchNorm2d(<span class="number">16</span>),</span><br><span class="line">            nn.ReLU6(inplace=<span class="literal">True</span>),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        ghost_model_setting = [</span><br><span class="line">            <span class="comment"># in, mid, out, kernel, stride, use_se</span></span><br><span class="line">            [<span class="number">16</span>, <span class="number">16</span>, <span class="number">16</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="literal">False</span>],</span><br><span class="line">            [<span class="number">16</span>, <span class="number">48</span>, <span class="number">24</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="literal">False</span>],</span><br><span class="line">            [<span class="number">24</span>, <span class="number">72</span>, <span class="number">24</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="literal">False</span>],</span><br><span class="line">            [<span class="number">24</span>, <span class="number">72</span>, <span class="number">40</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="literal">True</span>],</span><br><span class="line">            [<span class="number">40</span>, <span class="number">120</span>, <span class="number">40</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="literal">True</span>],</span><br><span class="line">            [<span class="number">40</span>, <span class="number">240</span>, <span class="number">80</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="literal">False</span>],</span><br><span class="line">            [<span class="number">80</span>, <span class="number">200</span>, <span class="number">80</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="literal">False</span>],</span><br><span class="line">            [<span class="number">80</span>, <span class="number">184</span>, <span class="number">80</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="literal">False</span>],</span><br><span class="line">            [<span class="number">80</span>, <span class="number">184</span>, <span class="number">80</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="literal">False</span>],</span><br><span class="line">            [<span class="number">80</span>, <span class="number">480</span>, <span class="number">112</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="literal">True</span>],</span><br><span class="line">            [<span class="number">112</span>, <span class="number">672</span>, <span class="number">112</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="literal">True</span>],</span><br><span class="line">            [<span class="number">112</span>, <span class="number">672</span>, <span class="number">160</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="literal">True</span>],</span><br><span class="line">            [<span class="number">160</span>, <span class="number">960</span>, <span class="number">160</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="literal">False</span>],</span><br><span class="line">            [<span class="number">160</span>, <span class="number">960</span>, <span class="number">160</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="literal">True</span>],</span><br><span class="line">            [<span class="number">160</span>, <span class="number">960</span>, <span class="number">160</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="literal">False</span>],</span><br><span class="line">            [<span class="number">160</span>, <span class="number">960</span>, <span class="number">160</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="literal">True</span>],</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        layers = []</span><br><span class="line">        <span class="keyword">for</span> in_channel, mid_channel, out_channel, kernel_size, stride, use_se <span class="keyword">in</span> ghost_model_setting:</span><br><span class="line">            layers.append(GhostBottleneck(in_channel=in_channel, mid_channel=mid_channel, out_channel=out_channel, kernel_size=kernel_size, stride=stride, use_se=use_se))</span><br><span class="line"></span><br><span class="line">        self.features = nn.Sequential(*layers)</span><br><span class="line"></span><br><span class="line">        self.last_stage = nn.Sequential(</span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">160</span>, out_channels=<span class="number">960</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>),</span><br><span class="line">            nn.BatchNorm2d(<span class="number">960</span>),</span><br><span class="line">            nn.AdaptiveAvgPool2d((<span class="number">1</span>, <span class="number">1</span>)),</span><br><span class="line">            nn.Conv2d(in_channels=<span class="number">960</span>, out_channels=<span class="number">1280</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>),</span><br><span class="line">            nn.ReLU6(inplace=<span class="literal">True</span>)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        self.classifier = nn.Linear(in_features=<span class="number">1280</span>, out_features=num_classes)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.first_conv(x)</span><br><span class="line">        x = self.features(x)</span><br><span class="line">        x = self.last_stage(x)</span><br><span class="line">        x = torch.flatten(x, start_dim=<span class="number">1</span>)</span><br><span class="line">        x = self.classifier(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">model = GhostNet()</span><br><span class="line"><span class="built_in">input</span> = torch.randn(<span class="number">1</span>, <span class="number">3</span>, <span class="number">224</span>, <span class="number">224</span>)</span><br><span class="line">out = model(<span class="built_in">input</span>)</span><br><span class="line"><span class="built_in">print</span>(out.size())</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-模型特点"><a href="#3-模型特点" class="headerlink" title="3. 模型特点"></a>3. 模型特点</h2><ol>
+<li>提出了<code>Ghost</code>模块</li>
+</ol>
+]]></content>
+      <categories>
+        <category>图像分类</category>
+      </categories>
+      <tags>
+        <tag>模型</tag>
+        <tag>backbone</tag>
+        <tag>轻量级网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Happy</title>
+    <url>/2022/09/01/Happy/</url>
+    <content><![CDATA[<blockquote>
+<p>好剧分享，快乐一下</p>
+</blockquote>
+<span id="more"></span>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://img1.baidu.com/it/u=3537231667,2941555870&fm=253&fmt=auto&app=138&f=JPEG?w=379&h=500 width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.bilibili.com/bangumi/play/ep473306?from_spmid=666.19.0.0">机智的监狱生活</a>
+    </div>
+</center>
+
+<hr>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.huo720.com%2Fposter%2Fimdb%2Ftt9863766_500.jpg&refer=http%3A%2F%2Fimg.huo720.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1664795170&t=2501170f0dd63d11cfa24cb9deee7c99 width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.kan.cc/view/759.html">囚犯医生</a>
+    </div>
+</center>
+
+<hr>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://www.kan.cc/uploads/allimg/202207/37b1c03158542032.jpg width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.kan.cc/view/3651.html">黑话律师</a>
+    </div>
+</center>
+
+<hr>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201710%2F09%2F20171009104335_FHQ4N.thumb.700_0.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1664793779&t=ad1fce1213d231341b1aa6b132911f43 width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.kan.cc/view/764.html">当你沉睡时</a>
+    </div>
+</center>
+
+<hr>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg3.doubanio.com%2Fview%2Fthing_review%2Fl%2Fpublic%2Fp1471230.jpg&refer=http%3A%2F%2Fimg3.doubanio.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1664794191&t=b9e22dc8084cab1a821b7e37e02abf97 width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.kan.cc/view/2572.html">信号</a>
+    </div>
+</center>
+
+<hr>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://b0.bdstatic.com/57856f0249542c0962c2c99da34d5900.jpg@h_1280 width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.nunuyy2.org/dianshiju/99901.html">现在开始showtime</a>
+    </div>
+</center>
+
+<hr>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fres.cngoldres.com%2Fupload%2Fnews%2F2017%2F9%2F30%2Faa5d17a14ace1f20a9ce718bdd5feea6.jpg&refer=http%3A%2F%2Fres.cngoldres.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1664794692&t=28f1813eee047ba4e1d2735162468c1c width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.iqiyi.com/v_19rr8w99fw.html">无证之罪</a>
+    </div>
+</center>
+
+<hr>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://img0.baidu.com/it/u=3186918077,702948581&fm=253&fmt=auto&app=138&f=JPEG?w=407&h=511 width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.iqiyi.com/v_2g5a5i86730.html">沉默的真相</a>
+    </div>
+</center>
+
+<hr>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://pic.rmb.bdstatic.com/bjh/news/0c78482db6d08fd4954fb76d3217f3b3.jpeg width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.iqiyi.com/v_suvb5xrr2w.html">警察荣誉</a>
+    </div>
+</center>
+
+<hr>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fp2.itc.cn%2Fimages01%2F20200617%2F313d50a545294762abd5811899047076.jpeg&refer=http%3A%2F%2Fp2.itc.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1664795464&t=ebf15de6c4180bc33c8b8ba220a9e2c1 width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.iqiyi.com/v_2ffkws0bgr0.html">隐秘的角落</a>
+    </div>
+</center>
+
+<hr>
+<p>$To$ $Be$ $Continue$</p>
+]]></content>
+      <categories>
+        <category>娱乐</category>
+      </categories>
+  </entry>
+  <entry>
     <title>GoogLeNet</title>
     <url>/2021/05/04/GoogLeNet/</url>
     <content><![CDATA[<h1 id="GoogLeNet"><a href="#GoogLeNet" class="headerlink" title="GoogLeNet"></a><a href="https://arxiv.org/abs/1409.4842">GoogLeNet</a></h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1. 模型介绍"></a>1. 模型介绍</h2><p>GoogLeNet是2014年ImageNet比赛的冠军，它的主要特点是网络不仅有深度，还在横向上具有“宽度”。从名字GoogLeNet可以知道这是来自谷歌工程师所设计的网络结构，而名字中GoogLeNet更是致敬了LeNet。GoogLeNet中最核心的部分是其内部子网络结构<code>Inception</code>，该结构灵感来源于NIN(Network In Network)。<br><span id="more"></span></p>
@@ -395,46 +578,6 @@ y_i=soft\max \left( x_i \right) =\frac{e^{x_i}}{\sum_{j=1}^k{e^{x_j}}}</script><
         <tag>模型</tag>
         <tag>backbone</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Happy</title>
-    <url>/2022/09/01/Happy/</url>
-    <content><![CDATA[<blockquote>
-<p>好剧分享，快乐一下</p>
-</blockquote>
-<span id="more"></span>
-<center>
-    <img style="border-radius: 0.3125em;
-    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
-    src=https://img1.baidu.com/it/u=3537231667,2941555870&fm=253&fmt=auto&app=138&f=JPEG?w=379&h=500 width = "30%" alt=""/>
-    <br>
-    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
-    display: inline-block;
-    color: #999;
-    padding: 2px;">
-    <a href="https://www.bilibili.com/bangumi/play/ep473306?from_spmid=666.19.0.0">机智的监狱生活</a>
-    </div>
-</center>
-
-<hr>
-<center>
-    <img style="border-radius: 0.3125em;
-    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
-    src=https://www.kan.cc/uploads/allimg/202207/37b1c03158542032.jpg width = "30%" alt=""/>
-    <br>
-    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
-    display: inline-block;
-    color: #999;
-    padding: 2px;">
-    <a href="https://www.kan.cc/view/3651.html">黑话律师</a>
-    </div>
-</center>
-
-<hr>
-]]></content>
-      <categories>
-        <category>娱乐</category>
-      </categories>
   </entry>
   <entry>
     <title>Optimizer</title>
@@ -633,6 +776,41 @@ y_i=soft\max \left( x_i \right) =\frac{e^{x_i}}{\sum_{j=1}^k{e^{x_j}}}</script><
       <tags>
         <tag>模型</tag>
         <tag>图像分割</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ShuffleNet</title>
+    <url>/2021/10/31/ShuffleNet/</url>
+    <content><![CDATA[<h1 id="ShuffleNet"><a href="#ShuffleNet" class="headerlink" title="ShuffleNet"></a><a href="https://arxiv.org/pdf/1707.01083">ShuffleNet</a></h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1. 模型介绍"></a>1. 模型介绍</h2><p>我们提出了一个极其效率的CNN架构——<code>ShuffleNet</code>，其专为计算能力非常有限的移动设备设计。这个新的架构利用了两个新的操作：<code>pointwise group conv</code>和<code>channel shuffle</code>，并大大降低计算成本，同时确保准确性。<br><span id="more"></span></p>
+<h2 id="2-模型结构及实现"><a href="#2-模型结构及实现" class="headerlink" title="2. 模型结构及实现"></a>2. 模型结构及实现</h2><h3 id="2-1-Channel-Shuffle-for-Group-Convolutions"><a href="#2-1-Channel-Shuffle-for-Group-Convolutions" class="headerlink" title="2.1 Channel Shuffle for Group Convolutions"></a>2.1 Channel Shuffle for Group Convolutions</h3><p>在微型网络结构中， 由于 <code>1×1</code> 卷积计算代价很高，在计算资源有限的情况下特征图的通道数就会受限，这会极大地降低模型的准确率。为了解决这个问题，一个简单的方案就是通道之间进行稀疏连接，也就是对 <code>1×1</code> 卷积也进行分组。</p>
+<p>如下图图(a)所示，输出特征图只与一部分输入特征图相连接。但这样就会带来一个副作用，叠加几个卷积层后，输出的特征图都只由输入特征的其中一部分产生，比如图中红色部分的特征就只由输入的红色部分特征得来，而蓝色部分的特征就只由输入的蓝色部分特征得来。这阻止了不同组之间特征的信息流动因此会减弱网络的表示能力。</p>
+<p><img src="https://img-blog.csdnimg.cn/6270bbe24603458284fc42d44421bdb9.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>如果我们允许组卷积可以从不同组获取输入数据，那么输入通道和输出通道将会完全相关联。如上图图(b)所示，先把每个组内的特征分为几个子组特征，再把每个子组特征分别送到下一层的每个组中去卷积。假设一个卷积层有$g$个组，其输出具有$g \times n$个通道，我们首先将输出通道<code>reshape</code>为$(g, n)$，然后再转置，最后将其<code>flatten</code>（展平）作为下一层的输入。具体见下图，其中$g=3，n=2$</p>
+<p><img src="https://img-blog.csdnimg.cn/e8e5c28945094cceb02059c03c9cee08.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<h3 id="2-2-ShuffleNet-Unit"><a href="#2-2-ShuffleNet-Unit" class="headerlink" title="2.2 ShuffleNet Unit"></a>2.2 ShuffleNet Unit</h3><p><img src="https://img-blog.csdnimg.cn/d9f0f1bdc7394707add48298fce93af4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>接下来分析一下，<code>ShuffleNet</code>的<code>FLOPs</code>的变化。假设输出尺寸为$c∗h∗w$，和<code>bottleneck</code>中的通道数为$m$，$g$是分组的组数。其中<code>ResNet</code>（左）和<code>ResNeXt</code>（右）的结构单元如下图所示：<br><img src="https://img-blog.csdnimg.cn/93a4adc51b3c438f82a0dd7ad09ec911.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<ul>
+<li><code>ResNet</code>的FLOPs为：$(c \times 1 \times 1)hwm+(m \times 3 \times 3)hwm+(m \times 1 \times 1)hwc=9hwm^2+2hwcm=hw(2cm+9m^2)$</li>
+<li><code>ResNeXt</code>的FLOPs为：$(c/g \times 1 \times 1)hwm + (m/g \times 3 \times 3)hwm+(m/g \times 1 \times 1)hwc=hw(2cm/g+9m^2/g)$（论文中是$hw(2cm+9m^2/g)$，应该是将ResNeXt中bottleneck中的1x1卷积看作为常规卷积，而非组卷积）</li>
+<li><code>ShuffleNet</code>的FLOPs为：$(c/g \times 1 \times 1)hwm+(m/m \times 3 \times 3)hwm+(m/g \times 1 \times 1)hwc=hw(2cm/g+9m)$</li>
+</ul>
+<p>可以看出，<code>ShuffleNet</code>相对的<code>FLOPs</code>较小</p>
+<h3 id="2-3-网络结构"><a href="#2-3-网络结构" class="headerlink" title="2.3 网络结构"></a>2.3 网络结构</h3><p><code>ShuffleNet</code>网络结构如下图所示：<br><img src="https://img-blog.csdnimg.cn/8359ce7ecfc2480ebd6a576907599d3c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<p>网络中的 ShuffleNet 单元可以划分为三个阶段，每个阶段的第一个单元步长为 <code>2</code>，每经过一个阶段特征图通道数翻倍，瓶颈层的特征图通道数为输出通道数的<code>1/4</code></p>
+<p>分组卷积的组数 $g$控制着点卷积的稀疏性，在同一个复杂度下，组数越多，特征图的通道数就可以越大。</p>
+<p>代码实现：<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConvBNRelU</span>(nn.Sequential):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channel, out_channel, kernel_size, stride, groups</span>):</span><br><span class="line">        padding = (kernel_size - <span class="number">1</span>) // <span class="number">2</span></span><br><span class="line">        <span class="built_in">super</span>(ConvBNRelU, self).__init__(</span><br><span class="line">            nn.Conv2d(in_channels=in_channel, out_channels=out_channel, kernel_size=kernel_size, stride=stride, padding=padding, groups=groups),</span><br><span class="line">            nn.BatchNorm2d(out_channel),</span><br><span class="line">            nn.ReLU6(inplace=<span class="literal">True</span>),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConvBN</span>(nn.Sequential):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channel, out_channel, groups</span>):</span><br><span class="line">        <span class="built_in">super</span>(ConvBN, self).__init__(</span><br><span class="line">            nn.Conv2d(in_channels=in_channel, out_channels=out_channel, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, groups=groups),</span><br><span class="line">            nn.BatchNorm2d(out_channel),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChannelShuffle</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, groups</span>):</span><br><span class="line">        <span class="built_in">super</span>(ChannelShuffle, self).__init__()</span><br><span class="line">        self.groups = groups</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="comment"># Channel shuffle: [N,C,H,W] -&gt; [N,g,C/g,H,W] -&gt; [N,C/g,g,H,w] -&gt; [N,C,H,W]</span></span><br><span class="line">        bacth_size, num_channels, height, width = x.size()</span><br><span class="line">        channels_per_group = num_channels // self.groups</span><br><span class="line"></span><br><span class="line">        x = x.view(bacth_size, self.groups, channels_per_group, height, width)</span><br><span class="line">        x = torch.transpose(x, dim0=<span class="number">1</span>, dim1=<span class="number">2</span>).contiguous()</span><br><span class="line">        x = x.view(bacth_size, -<span class="number">1</span>, height, width)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ShuffleNetUnits</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channel, out_channel, stride, groups</span>):</span><br><span class="line">        <span class="built_in">super</span>(ShuffleNetUnits, self).__init__()</span><br><span class="line">        self.stride = stride</span><br><span class="line">        out_channel = out_channel - in_channel <span class="keyword">if</span> self.stride &gt; <span class="number">1</span> <span class="keyword">else</span> out_channel</span><br><span class="line">        mid_channel = out_channel // <span class="number">4</span></span><br><span class="line"></span><br><span class="line">        self.bottleneck = nn.Sequential(</span><br><span class="line">            ConvBNRelU(in_channel=in_channel, out_channel=mid_channel, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, groups=groups),</span><br><span class="line">            ChannelShuffle(groups=groups),</span><br><span class="line">            ConvBNRelU(in_channel=mid_channel, out_channel=mid_channel, kernel_size=<span class="number">3</span>, stride=stride, groups=groups),</span><br><span class="line">            ConvBN(in_channel=mid_channel, out_channel=out_channel, groups=groups),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.stride &gt; <span class="number">1</span>:</span><br><span class="line">            self.shortcut = nn.AvgPool2d(kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        self.relu = nn.ReLU6(inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        out = self.bottleneck(x)</span><br><span class="line">        <span class="keyword">if</span> self.stride &gt; <span class="number">1</span>:</span><br><span class="line">            out = torch.cat([self.shortcut(x), out], dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            out += x</span><br><span class="line">        <span class="keyword">return</span> self.relu(out)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ShuffleNet</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, planes, layers, groups, num_classes=<span class="number">1000</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(ShuffleNet, self).__init__()</span><br><span class="line"></span><br><span class="line">        self.stage1 = nn.Sequential(</span><br><span class="line">            ConvBNRelU(in_channel=<span class="number">3</span>, out_channel=<span class="number">24</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, groups=<span class="number">1</span>),</span><br><span class="line">            nn.MaxPool2d(kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        self.stage2 = self._make_layer(in_channel=<span class="number">24</span>, out_channel=planes[<span class="number">0</span>], groups=groups, block_num=layers[<span class="number">0</span>], is_stage2=<span class="literal">True</span>)</span><br><span class="line">        self.stage3 = self._make_layer(in_channel=planes[<span class="number">0</span>], out_channel=planes[<span class="number">1</span>], groups=groups, block_num=layers[<span class="number">1</span>], is_stage2=<span class="literal">False</span>)</span><br><span class="line">        self.stage4 = self._make_layer(in_channel=planes[<span class="number">1</span>], out_channel=planes[<span class="number">2</span>], groups=groups, block_num=layers[<span class="number">2</span>], is_stage2=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">        self.globalpool = nn.AdaptiveAvgPool2d((<span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">        self.fc = nn.Sequential(</span><br><span class="line">            nn.Dropout(p=<span class="number">0.2</span>),</span><br><span class="line">            nn.Linear(in_features=planes[<span class="number">2</span>], out_features=num_classes)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="comment"># weight init</span></span><br><span class="line">        <span class="keyword">for</span> m <span class="keyword">in</span> self.modules():</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(m, nn.Conv2d):</span><br><span class="line">                nn.init.kaiming_normal_(m.weight, mode=<span class="string">&#x27;fan_out&#x27;</span>)</span><br><span class="line">                <span class="keyword">if</span> m.bias <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    nn.init.zeros_(m.bias)</span><br><span class="line">            <span class="keyword">elif</span> <span class="built_in">isinstance</span>(m, nn.BatchNorm2d):</span><br><span class="line">                nn.init.ones_(m.weight)</span><br><span class="line">                nn.init.zeros_(m.bias)</span><br><span class="line">            <span class="keyword">elif</span> <span class="built_in">isinstance</span>(m, nn.Linear):</span><br><span class="line">                nn.init.normal_(m.weight, mean=<span class="number">0</span>, std=<span class="number">0.01</span>)</span><br><span class="line">                nn.init.zeros_(m.bias)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_make_layer</span>(<span class="params">self, in_channel, out_channel, groups, block_num, is_stage2</span>):</span><br><span class="line">        layers = []</span><br><span class="line">        layers.append(ShuffleNetUnits(in_channel=in_channel, out_channel=out_channel, stride=<span class="number">2</span>, groups=<span class="number">1</span> <span class="keyword">if</span> is_stage2 <span class="keyword">else</span> groups))</span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, block_num):</span><br><span class="line">            layers.append(ShuffleNetUnits(in_channel=out_channel, out_channel=out_channel, stride=<span class="number">1</span>, groups=groups))</span><br><span class="line">        <span class="keyword">return</span> nn.Sequential(*layers)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.stage1(x)</span><br><span class="line">        x = self.stage2(x)</span><br><span class="line">        x = self.stage3(x)</span><br><span class="line">        x = self.stage4(x)</span><br><span class="line"></span><br><span class="line">        x = self.globalpool(x)</span><br><span class="line">        x = torch.flatten(x, start_dim=<span class="number">1</span>)</span><br><span class="line">        x = self.fc(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">shufflenet_g1</span>(<span class="params">**kwargs</span>):</span><br><span class="line">    planes = [<span class="number">144</span>, <span class="number">288</span>, <span class="number">576</span>]</span><br><span class="line">    layers = [<span class="number">4</span>, <span class="number">8</span>, <span class="number">4</span>]</span><br><span class="line">    model = ShuffleNet(planes=planes, layers=layers, groups=<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">shufflenet_g2</span>(<span class="params">**kwargs</span>):</span><br><span class="line">    planes = [<span class="number">200</span>, <span class="number">400</span>, <span class="number">800</span>]</span><br><span class="line">    layers = [<span class="number">4</span>, <span class="number">8</span>, <span class="number">4</span>]</span><br><span class="line">    model = ShuffleNet(planes=planes, layers=layers, groups=<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">model = shufflenet_g2()</span><br><span class="line">x = torch.randn(<span class="number">1</span>, <span class="number">3</span>, <span class="number">224</span>, <span class="number">224</span>)</span><br><span class="line">out = model(x)</span><br><span class="line"><span class="built_in">print</span>(out.size())</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-模型特点"><a href="#3-模型特点" class="headerlink" title="3. 模型特点"></a>3. 模型特点</h2><ol>
+<li>提出了<code>pointwise group conv</code></li>
+<li>提出了<code>channel shuffle</code>操作</li>
+</ol>
+]]></content>
+      <categories>
+        <category>图像分类</category>
+      </categories>
+      <tags>
+        <tag>模型</tag>
+        <tag>backbone</tag>
+        <tag>轻量级网络</tag>
       </tags>
   </entry>
   <entry>
