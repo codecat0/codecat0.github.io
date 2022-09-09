@@ -1137,7 +1137,7 @@ Jaccard(X,Y)=\frac{X\cap Y}{X\cup Y}</script>]]></content>
   <entry>
     <title>Transfomer</title>
     <url>/2022/09/09/Transfomer/</url>
-    <content><![CDATA[<h1 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer)"></a><a href="(https://arxiv.org/abs/1706.03762">Transformer</a>)</h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1.模型介绍"></a>1.模型介绍</h2><p>Transformer 网络架构架构由 Ashish Vaswani 等人在 Attention Is All You Need一文中提出，并用于机器翻译任务，和以往网络架构有所区别的是，该网络架构中，编码器和解码器没有采用 RNN 或 CNN 等网络架构，而是采用完全依赖于注意力机制的架构。<br><span id="more"></span></p>
+    <content><![CDATA[<h1 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer"></a><a href="https://arxiv.org/abs/1706.03762">Transformer</a></h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1.模型介绍"></a>1.模型介绍</h2><p>Transformer 网络架构架构由 Ashish Vaswani 等人在 Attention Is All You Need一文中提出，并用于机器翻译任务，和以往网络架构有所区别的是，该网络架构中，编码器和解码器没有采用 RNN 或 CNN 等网络架构，而是采用完全依赖于注意力机制的架构。<br><span id="more"></span></p>
 <h2 id="2-模型结构及实现"><a href="#2-模型结构及实现" class="headerlink" title="2. 模型结构及实现"></a>2. 模型结构及实现</h2><p>Transformer的结构包括<code>Input Embedding</code>, <code>Position Embedding</code>, <code>Encoder</code>, <code>Decoder</code>。</p>
 <h3 id="2-1-Embedding"><a href="#2-1-Embedding" class="headerlink" title="2.1 Embedding"></a>2.1 Embedding</h3><p>字向量与位置编码的公式表示如下：</p>
 <script type="math/tex; mode=display">X=Embedding Lookup(X)+Position Encoding</script><h4 id="2-1-1-Input-Embedding"><a href="#2-1-1-Input-Embedding" class="headerlink" title="2.1.1 Input Embedding"></a>2.1.1 Input Embedding</h4><p>可以将Input Embedding看作是一个 lookup table，对于每个 word，进行 word embedding 就相当于一个lookup操作，查出一个对应结果。</p>
