@@ -363,8 +363,7 @@ y_i=soft\max \left( x_i \right) =\frac{e^{x_i}}{\sum_{j=1}^k{e^{x_j}}}</script><
   <entry>
     <title>GhostNet</title>
     <url>/2021/10/31/GhostNet/</url>
-    <content><![CDATA[<h1 id="Ghost-Net"><a href="#Ghost-Net" class="headerlink" title="Ghost Net"></a><a href="https://arxiv.org/pdf/1911.11907">Ghost Net</a></h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1. 模型介绍"></a>1. 模型介绍</h2><p>下图是由ResNet-50中的第一个残差块生成的某些中间特征图的可视化。从图中我们可以看出，这里面有很多特征图是具有高度相似性的（在图中分别用不同的颜色示意），换句话说，就是存在许多的冗余特征图。所以从另一个角度想，我们是不是可以利用一系列的线性变化，以很小的代价生成许多能从原始特征发掘所需信息的“幻影”特征图呢？这个便是整篇文章的核心思想。</p>
-<p><img src="https://img-blog.csdnimg.cn/59beb0d06e2b405b8189693edb871e1c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+    <content><![CDATA[<h1 id="Ghost-Net"><a href="#Ghost-Net" class="headerlink" title="Ghost Net"></a><a href="https://arxiv.org/pdf/1911.11907">Ghost Net</a></h1><h2 id="1-模型介绍"><a href="#1-模型介绍" class="headerlink" title="1. 模型介绍"></a>1. 模型介绍</h2><p>下图是由ResNet-50中的第一个残差块生成的某些中间特征图的可视化。从图中我们可以看出，这里面有很多特征图是具有高度相似性的（在图中分别用不同的颜色示意），换句话说，就是存在许多的冗余特征图。所以从另一个角度想，我们是不是可以利用一系列的线性变化，以很小的代价生成许多能从原始特征发掘所需信息的“幻影”特征图呢？这个便是整篇文章的核心思想。<br><span id="more"></span><br><img src="https://img-blog.csdnimg.cn/59beb0d06e2b405b8189693edb871e1c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
 <h2 id="2-模型结构及实现"><a href="#2-模型结构及实现" class="headerlink" title="2. 模型结构及实现"></a>2. 模型结构及实现</h2><p><img src="https://img-blog.csdnimg.cn/b643dd29226143d3915daeb987d2927d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5L2V5aaC5Y2D5rO3,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
 <p><strong>Ghost module：</strong></p>
 <ol>
@@ -457,6 +456,34 @@ y_i=soft\max \left( x_i \right) =\frac{e^{x_i}}{\sum_{j=1}^k{e^{x_j}}}</script><
     color: #999;
     padding: 2px;">
     <a href="https://www.kan.cc/view/759.html">囚犯医生</a>
+    </div>
+</center>
+
+<hr>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.doubanio.com%2Fview%2Fthing_review%2Fl%2Fpublic%2Fp6419123.jpg&refer=http%3A%2F%2Fimg2.doubanio.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666097507&t=b17291cc94296abb941f3ae35b6f5d05 width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.hanjukankan.com/movie/index955.html">模范出租车</a>
+    </div>
+</center>
+
+<hr>
+<center>
+    <img style="border-radius: 0.3125em;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" 
+    src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201609%2F12%2F20160912212832_aJB4R.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666097758&t=6d1d5417d57a63bddb1a24886ed062c5 width = "30%" alt=""/>
+    <br>
+    <div style="color:orange; border-bottom: 1px solid #d9d9d9;
+    display: inline-block;
+    color: #999;
+    padding: 2px;">
+    <a href="https://www.hanjukankan.com/movie/index184.html">W-两个世界</a>
     </div>
 </center>
 
