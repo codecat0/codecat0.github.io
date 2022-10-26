@@ -1252,11 +1252,6 @@ Jaccard(X,Y)=\frac{X\cap Y}{X\cup Y}</script>]]></content>
       </tags>
   </entry>
   <entry>
-    <title>CV面经</title>
-    <url>/2022/09/18/CV%E9%9D%A2%E7%BB%8F/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>OCRNet</title>
     <url>/2022/10/26/OCRNet/</url>
     <content><![CDATA[<h1 id="OCRNet论文详解"><a href="#OCRNet论文详解" class="headerlink" title="OCRNet论文详解"></a>OCRNet论文详解</h1><p>针对语义分割中如何构建上下文信息，微软亚洲研究院和中科院计算所的研究员们提出了一种新的物体上下文信息——在构建上下文信息时显式地增强了来自于同一类物体的像素的贡献，这种新的上下文信息从语义分割的定义出发，符合第一性原理思维，在2019年7月和2020年1月的 <code>Cityscapes leaderboard</code>提交结果中都取得了语义分割任务第一名的成绩。</p>
