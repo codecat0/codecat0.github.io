@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/cat.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cat32x32.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cat16x16.svg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-atom.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="OCRNet论文详解针对语义分割中如何构建上下文信息，微软亚洲研究院和中科院计算所的研究员们提出了一种新的物体上下文信息——在构建上下文信息时显式地增强了来自于同一类物体的像素的贡献，这种新的上下文信息从语义分割的定义出发，符合第一性原理思维，在2019年7月和2020年1月的 Cityscapes leaderboard提交结果中都取得了语义分割任务第一名的成绩。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OCRNet">
+<meta property="og:url" content="http://example.com/2022/10/26/OCRNet/index.html">
+<meta property="og:site_name" content="CodeCat">
+<meta property="og:description" content="OCRNet论文详解针对语义分割中如何构建上下文信息，微软亚洲研究院和中科院计算所的研究员们提出了一种新的物体上下文信息——在构建上下文信息时显式地增强了来自于同一类物体的像素的贡献，这种新的上下文信息从语义分割的定义出发，符合第一性原理思维，在2019年7月和2020年1月的 Cityscapes leaderboard提交结果中都取得了语义分割任务第一名的成绩。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/6359363e16f2c2beb1a8f77a.png">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/6359363e16f2c2beb1a8f77a.png">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/6359363e16f2c2beb1a8f77a.png">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/6359363e16f2c2beb1a8f77a.png">
+<meta property="article:published_time" content="2022-10-26T13:05:37.000Z">
+<meta property="article:modified_time" content="2022-10-26T13:46:31.029Z">
+<meta property="article:author" content="CodeCat">
+<meta property="article:tag" content="模型">
+<meta property="article:tag" content="图像分割">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.imgdb.cn/item/6359363e16f2c2beb1a8f77a.png">
+
+<link rel="canonical" href="http://example.com/2022/10/26/OCRNet/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>OCRNet | CodeCat</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/codecat0" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">CodeCat</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/26/OCRNet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="CodeCat">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CodeCat">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OCRNet
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-10-26 21:05:37 / 修改时间：21:46:31" itemprop="dateCreated datePublished" datetime="2022-10-26T21:05:37+08:00">2022-10-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" itemprop="url" rel="index"><span itemprop="name">图像分割</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="OCRNet论文详解"><a href="#OCRNet论文详解" class="headerlink" title="OCRNet论文详解"></a>OCRNet论文详解</h1><p>针对语义分割中如何构建上下文信息，微软亚洲研究院和中科院计算所的研究员们提出了一种新的物体上下文信息——在构建上下文信息时显式地增强了来自于同一类物体的像素的贡献，这种新的上下文信息从语义分割的定义出发，符合第一性原理思维，在2019年7月和2020年1月的 <code>Cityscapes leaderboard</code>提交结果中都取得了语义分割任务第一名的成绩。</p>
+<span id="more"></span>
+<h2 id="1-模型架构"><a href="#1-模型架构" class="headerlink" title="1. 模型架构"></a>1. 模型架构</h2><p>文章的总体思路是：<strong>像素的标签是像素所在的对象的标签，并且通过用相应的对象区域表示来表征每个像素来加强像素表示。</strong></p>
+<p><img src="https://pic1.imgdb.cn/item/6359363e16f2c2beb1a8f77a.png" alt=""><br>主要分为三个步骤</p>
+<ul>
+<li>根据网络中间层得特征表示估测一个粗略得语义分割结果，即论文中得<code>Soft Object Regions</code></li>
+<li>根据粗略得语义分割结果和网络最深层的特征表示计算出K组向量，即论文中得<code>Object Regions Representations</code>，其中每一个向量对应一个语义类别得特征表示</li>
+<li>将网络最深层的特征表示<code>Pixel Representations</code>作为$Query$，<code>Object Regions Representations</code>作为$Key-Value$，送入$Cross-Attention$得到最后的物体上下文特征表示<code>OCR(Object Contextual Representation)</code>；然后将<code>Object Contextual Representation</code>和<code>Pixel Representations</code>拼接在一起经过融合之后得到<code>Augmented Representations</code>，最后加一个分类器预测最后的语义分割结果</li>
+</ul>
+<h2 id="2-代码实现-Paddle"><a href="#2-代码实现-Paddle" class="headerlink" title="2. 代码实现(Paddle)"></a>2. 代码实现(Paddle)</h2><h3 id="2-1-Soft-Object-Regions-粉色框"><a href="#2-1-Soft-Object-Regions-粉色框" class="headerlink" title="2.1 Soft Object Regions (粉色框)"></a>2.1 Soft Object Regions (粉色框)</h3><p><img src="https://pic1.imgdb.cn/item/6359363e16f2c2beb1a8f77a.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Aux_head</span>(nn.Layer):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;生成soft object regions&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, num_classes</span>):</span><br><span class="line">        self.conv = nn.Sequential(</span><br><span class="line">            nn.Conv2D(in_channels, in_channels, <span class="number">1</span>),</span><br><span class="line">            nn.BatchNorm2D(in_channels),</span><br><span class="line">            nn.ReLU()</span><br><span class="line">        )</span><br><span class="line">        self.cls = nn.Conv2D(in_channels, num_classes, <span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, feat</span>):</span><br><span class="line">        soft_regions = self.cls(self.conv(feat))</span><br><span class="line">        <span class="keyword">return</span> soft_regions</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-Object-Region-Representations-紫色框"><a href="#2-2-Object-Region-Representations-紫色框" class="headerlink" title="2.2 Object Region Representations (紫色框)"></a>2.2 Object Region Representations (紫色框)</h3><p><img src="https://pic1.imgdb.cn/item/6359363e16f2c2beb1a8f77a.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SpatialGatherBlock</span>(nn.Layer):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;生成object region representations&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, pixels_channels, regions_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.pixels_channels = pixels_channels</span><br><span class="line">        self.regions_channels = regions_channels</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, pixels, regions</span>):</span><br><span class="line">        <span class="comment"># pixels: from (n, c, h, w) to (n, h*w, c)</span></span><br><span class="line">        pixels = paddle.reshape(pixels, (<span class="number">0</span>, self.pixels_channels, -<span class="number">1</span>))</span><br><span class="line">        pixels = paddle.transpose(pixels, (<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># regions: from (n, k, h, w) to (n, k, h*w)</span></span><br><span class="line">        regions = paddle.reshape(regions, (<span class="number">0</span>, self.regions_channels, -<span class="number">1</span>))</span><br><span class="line">        regions = F.softmax(regions, axis=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># feats: from (n, k, c) to (n, c, k, 1)</span></span><br><span class="line">        feats = paddle.bmm(regions, pixels)</span><br><span class="line">        feats = paddle.transpose(feats, (<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>))</span><br><span class="line">        feats = paddle.unsqueeze(feats, axis=-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> feats</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-Augmented-Representations-黄色框"><a href="#2-3-Augmented-Representations-黄色框" class="headerlink" title="2.3 Augmented Representations (黄色框)"></a>2.3 Augmented Representations (黄色框)</h3><p><img src="https://pic1.imgdb.cn/item/6359363e16f2c2beb1a8f77a.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SpatialOCRModule</span>(nn.Layer):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;生成 augmented representations&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,</span></span><br><span class="line"><span class="params">                 in_channels,</span></span><br><span class="line"><span class="params">                 key_channels,</span></span><br><span class="line"><span class="params">                 out_channels,</span></span><br><span class="line"><span class="params">                 dropout_rate=<span class="number">0.1</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        self.attention_block = ObjectAttentionBlock(in_channels, key_channels)</span><br><span class="line">        self.conv1x1 = nn.Sequential(</span><br><span class="line">            layers.ConvBNReLU(<span class="number">2</span> * in_channels, out_channels, <span class="number">1</span>),</span><br><span class="line">            nn.Dropout2D(dropout_rate))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, pixels, regions</span>):</span><br><span class="line">        context = self.attention_block(pixels, regions)</span><br><span class="line">        feats = paddle.concat([context, pixels], axis=<span class="number">1</span>)</span><br><span class="line">        feats = self.conv1x1(feats)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> feats</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ObjectAttentionBlock</span>(nn.Layer):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;self-attention 模块&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, key_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        self.in_channels = in_channels</span><br><span class="line">        self.key_channels = key_channels</span><br><span class="line"></span><br><span class="line">        self.f_pixel = nn.Sequential(</span><br><span class="line">            layers.ConvBNReLU(in_channels, key_channels, <span class="number">1</span>),</span><br><span class="line">            layers.ConvBNReLU(key_channels, key_channels, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">        self.f_object = nn.Sequential(</span><br><span class="line">            layers.ConvBNReLU(in_channels, key_channels, <span class="number">1</span>),</span><br><span class="line">            layers.ConvBNReLU(key_channels, key_channels, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">        self.f_down = layers.ConvBNReLU(in_channels, key_channels, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        self.f_up = layers.ConvBNReLU(key_channels, in_channels, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, proxy</span>):</span><br><span class="line">        x_shape = paddle.shape(x)</span><br><span class="line">        <span class="comment"># query : from (n, c1, h1, w1) to (n, h1*w1, key_channels)</span></span><br><span class="line">        query = self.f_pixel(x)</span><br><span class="line">        query = paddle.reshape(query, (<span class="number">0</span>, self.key_channels, -<span class="number">1</span>))</span><br><span class="line">        query = paddle.transpose(query, (<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># key : from (n, c2, h2, w2) to (n, key_channels, h2*w2)</span></span><br><span class="line">        key = self.f_object(proxy)</span><br><span class="line">        key = paddle.reshape(key, (<span class="number">0</span>, self.key_channels, -<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># value : from (n, c2, h2, w2) to (n, h2*w2, key_channels)</span></span><br><span class="line">        value = self.f_down(proxy)</span><br><span class="line">        value = paddle.reshape(value, (<span class="number">0</span>, self.key_channels, -<span class="number">1</span>))</span><br><span class="line">        value = paddle.transpose(value, (<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># sim_map (n, h1*w1, h2*w2)</span></span><br><span class="line">        sim_map = paddle.bmm(query, key)</span><br><span class="line">        sim_map = (self.key_channels**-<span class="number">.5</span>) * sim_map</span><br><span class="line">        sim_map = F.softmax(sim_map, axis=-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># context from (n, h1*w1, key_channels) to (n , out_channels, h1, w1)</span></span><br><span class="line">        context = paddle.bmm(sim_map, value)</span><br><span class="line">        context = paddle.transpose(context, (<span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>))</span><br><span class="line">        context = paddle.reshape(context,</span><br><span class="line">                                 (<span class="number">0</span>, self.key_channels, x_shape[<span class="number">2</span>], x_shape[<span class="number">3</span>]))</span><br><span class="line">        context = self.f_up(context)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> context</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>完整代码：<a target="_blank" rel="noopener" href="https://github.com/PaddlePaddle/PaddleSeg/blob/release%2F2.6/paddleseg/models/ocrnet.py">https://github.com/PaddlePaddle/PaddleSeg/blob/release%2F2.6/paddleseg/models/ocrnet.py</a></strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%A8%A1%E5%9E%8B/" rel="tag"># 模型</a>
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" rel="tag"># 图像分割</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/18/CV%E9%9D%A2%E7%BB%8F/" rel="prev" title="CV面经">
+      <i class="fa fa-chevron-left"></i> CV面经
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#OCRNet%E8%AE%BA%E6%96%87%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">OCRNet论文详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">1. 模型架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-Paddle"><span class="nav-number">1.2.</span> <span class="nav-text">2. 代码实现(Paddle)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Soft-Object-Regions-%E7%B2%89%E8%89%B2%E6%A1%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 Soft Object Regions (粉色框)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Object-Region-Representations-%E7%B4%AB%E8%89%B2%E6%A1%86"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 Object Region Representations (紫色框)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Augmented-Representations-%E9%BB%84%E8%89%B2%E6%A1%86"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 Augmented Representations (黄色框)</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CodeCat"
+      src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">CodeCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/codecat0" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;codecat0" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2049413359@qq.com" title="E-Mail → mailto:2049413359@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/qq_42735631" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_42735631" rel="noopener" target="_blank"><i class="fa fa-crosshairs fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bilibili.com/" title="https:&#x2F;&#x2F;www.bilibili.com&#x2F;" rel="noopener" target="_blank">Bilibili</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://omofun.tv/" title="https:&#x2F;&#x2F;omofun.tv&#x2F;" rel="noopener" target="_blank">OmoFun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pytorch.org/" title="https:&#x2F;&#x2F;pytorch.org&#x2F;" rel="noopener" target="_blank">PyTorch</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://scikit-learn.org/stable/" title="https:&#x2F;&#x2F;scikit-learn.org&#x2F;stable&#x2F;" rel="noopener" target="_blank">sklearn</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1377261977&auto=1&height=66"></iframe>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CodeCat</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">139k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:06</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'ff115aa2d466d2b668a2',
+      clientSecret: '6b319b34677bb39ea28a4bc3971b71906ccd64ae',
+      repo        : 'blog_comment',
+      owner       : 'codecat0',
+      admin       : ['codecat0'],
+      id          : 'df3d76fa6e8306c6d21fd2b218af1bad',
+        language: '',
+      distractionFreeMode: false
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+
+  
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/fireworks.js"></script>
+  
+ 
+</body>
+</html>
