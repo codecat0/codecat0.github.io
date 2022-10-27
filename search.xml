@@ -1280,4 +1280,27 @@ Jaccard(X,Y)=\frac{X\cap Y}{X\cup Y}</script>]]></content>
         <tag>Transformer</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Attention UNet</title>
+    <url>/2022/10/27/AttUNet/</url>
+    <content><![CDATA[<h1 id="Attention-UNet"><a href="#Attention-UNet" class="headerlink" title="Attention UNet"></a>Attention UNet</h1><p>在医疗图像中，就是把注意力集中到对特定任务有用的显著特征（比如说相关组织或者是器官），抑制输入图像中的不相关区域。论文中是以U-net为基础进行集成，在<code>decoder</code>部分使用了<code>Attention Gates</code> ，得到了<code>Attention U-Net</code>模型。实验表明，融入<code>AG</code>后，<code>Unet</code>模型的精度更高了。<br><span id="more"></span></p>
+<h2 id="1-论文简介"><a href="#1-论文简介" class="headerlink" title="1. 论文简介"></a>1. 论文简介</h2><h3 id="1-1-主要目标"><a href="#1-1-主要目标" class="headerlink" title="1.1 主要目标"></a>1.1 主要目标</h3><ul>
+<li>抑制输入图像中的不相关区域，同时突出特定局部区域的显著特征</li>
+<li>用soft-attention 代替hard-attention的思路（注意：sorf-attention可微，可以微分的attention就可以通过神经网络算出梯度并且前向传播和后向反馈来学习得到attention的权重）</li>
+<li>集成到标准UNet网络结构中时要简单方便、计算开销小，最重要的是提高模型的灵敏度和预测的精度</li>
+</ul>
+<h3 id="1-2-网络结构"><a href="#1-2-网络结构" class="headerlink" title="1.2 网络结构"></a>1.2 网络结构</h3><p><img src="https://pic1.imgdb.cn/item/635a352f16f2c2beb1c176bb.png" alt=""></p>
+<h2 id="2-代码实现-Paddle"><a href="#2-代码实现-Paddle" class="headerlink" title="2. 代码实现(Paddle)"></a>2. 代码实现(Paddle)</h2><p><img src="https://pic1.imgdb.cn/item/635a356c16f2c2beb1c1d6dd.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AttentionBlock</span>(nn.Layer):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Attention Gate 模块&quot;&quot;&quot;</span><span class="string">&quot;</span></span><br><span class="line"><span class="string">    def __init__(self, F_g, F_l, F_out):</span></span><br><span class="line"><span class="string">        super().__init__()</span></span><br><span class="line"><span class="string">        self.W_g = nn.Sequential(</span></span><br><span class="line"><span class="string">            nn.Conv2D(</span></span><br><span class="line"><span class="string">                F_g, F_out, kernel_size=1, stride=1, padding=0),</span></span><br><span class="line"><span class="string">            nn.BatchNorm2D(F_out))</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        self.W_x = nn.Sequential(</span></span><br><span class="line"><span class="string">            nn.Conv2D(</span></span><br><span class="line"><span class="string">                F_l, F_out, kernel_size=1, stride=1, padding=0),</span></span><br><span class="line"><span class="string">            nn.BatchNorm2D(F_out))</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        self.psi = nn.Sequential(</span></span><br><span class="line"><span class="string">            nn.Conv2D(</span></span><br><span class="line"><span class="string">                F_out, 1, kernel_size=1, stride=1, padding=0),</span></span><br><span class="line"><span class="string">            nn.BatchNorm2D(1),</span></span><br><span class="line"><span class="string">            nn.Sigmoid())</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        self.relu = nn.ReLU()</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    def forward(self, g, x):</span></span><br><span class="line"><span class="string">        g1 = self.W_g(g)</span></span><br><span class="line"><span class="string">        x1 = self.W_x(x)</span></span><br><span class="line"><span class="string">        psi = self.relu(g1 + x1)</span></span><br><span class="line"><span class="string">        psi = self.psi(psi)</span></span><br><span class="line"><span class="string">        res = x * psi</span></span><br><span class="line"><span class="string">        return res</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>完整代码：<a href="https://github.com/PaddlePaddle/PaddleSeg/blob/release%2F2.6/paddleseg/models/attention_unet.py">https://github.com/PaddlePaddle/PaddleSeg/blob/release%2F2.6/paddleseg/models/attention_unet.py</a></strong></p>
+]]></content>
+      <categories>
+        <category>图像分割</category>
+      </categories>
+      <tags>
+        <tag>模型</tag>
+        <tag>图像分割</tag>
+      </tags>
+  </entry>
 </search>
