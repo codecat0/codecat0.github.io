@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/cat.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cat32x32.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cat16x16.svg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-atom.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="$U^2-Net$论文详解1. 论文简介设计了一个简单而强大的深度网络架构$U^2-Net$，用于显著目标检测。我们的$U^2-Net$的体系结构是一个两层嵌套的$U$结构。 该设计有以下两点优势：  它能够捕捉更多的上下文信息，因为提出了RSU(ReSidual U-blocks)结构，融合了不同尺度的感受野的特征 它增加了整个架构的深度但并没有显著增加计算成本，因为在这些RSU块中使用了池化操">
+<meta property="og:type" content="article">
+<meta property="og:title" content="U2Net">
+<meta property="og:url" content="http://example.com/2022/10/28/U2Net/index.html">
+<meta property="og:site_name" content="CodeCat">
+<meta property="og:description" content="$U^2-Net$论文详解1. 论文简介设计了一个简单而强大的深度网络架构$U^2-Net$，用于显著目标检测。我们的$U^2-Net$的体系结构是一个两层嵌套的$U$结构。 该设计有以下两点优势：  它能够捕捉更多的上下文信息，因为提出了RSU(ReSidual U-blocks)结构，融合了不同尺度的感受野的特征 它增加了整个架构的深度但并没有显著增加计算成本，因为在这些RSU块中使用了池化操">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/635bc24116f2c2beb152b475.png">
+<meta property="og:image" content="https://pic1.imgdb.cn/item/635bc3bf16f2c2beb154b9ae.png">
+<meta property="article:published_time" content="2022-10-28T11:01:05.000Z">
+<meta property="article:modified_time" content="2022-10-28T12:03:57.079Z">
+<meta property="article:author" content="CodeCat">
+<meta property="article:tag" content="模型">
+<meta property="article:tag" content="图像分割">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic1.imgdb.cn/item/635bc24116f2c2beb152b475.png">
+
+<link rel="canonical" href="http://example.com/2022/10/28/U2Net/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>U2Net | CodeCat</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/codecat0" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">CodeCat</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/28/U2Net/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="CodeCat">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CodeCat">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          U2Net
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-10-28 19:01:05 / 修改时间：20:03:57" itemprop="dateCreated datePublished" datetime="2022-10-28T19:01:05+08:00">2022-10-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" itemprop="url" rel="index"><span itemprop="name">图像分割</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="U-2-Net-论文详解"><a href="#U-2-Net-论文详解" class="headerlink" title="$U^2-Net$论文详解"></a>$U^2-Net$论文详解</h1><h2 id="1-论文简介"><a href="#1-论文简介" class="headerlink" title="1. 论文简介"></a>1. 论文简介</h2><p>设计了一个简单而强大的深度网络架构$U^2-Net$，用于显著目标检测。我们的$U^2-Net$的体系结构是一个两层嵌套的$U$结构。</p>
+<p>该设计有以下两点优势：</p>
+<ul>
+<li>它能够捕捉更多的上下文信息，因为提出了<code>RSU(ReSidual U-blocks)</code>结构，融合了不同尺度的感受野的特征</li>
+<li>它增加了整个架构的深度但并没有显著增加计算成本，因为在这些RSU块中使用了池化操作</li>
+</ul>
+<span id="more"></span>
+<p>这种架构使我们能够从头开始训练深度网络，而无需使用图像分类任务中的<code>backbone</code>。</p>
+<h2 id="2-网络结构解析"><a href="#2-网络结构解析" class="headerlink" title="2. 网络结构解析"></a>2. 网络结构解析</h2><p><img src="https://pic1.imgdb.cn/item/635bc24116f2c2beb152b475.png" alt=""></p>
+<p>上图展示了整个$U^2-Net$网络的结构。通过下图可以看到网络的主体是一个类似UNet的结构，网络的中的每个<code>Encoder</code>和<code>Decoder</code>模块也是类似<code>UNet</code>的结构，也就是在大的<code>UNet</code>中嵌入了一堆小<code>UNet</code>。</p>
+<p>其中，<code>En_1</code>、<code>En_2</code>、<code>En_3</code>、<code>En_4</code>、<code>De_1</code>、<code>De_2</code>、<code>De_3</code>、<code>De_4</code>采用的是同一种<code>Block</code>，只不过深度不同，该Block就是论文中提出的<code>ReSidual U-block</code>简称<code>RSU</code>。最后还剩下<code>En_5</code>、<code>En_6</code>和<code>De_5</code>三个模块。这三个模块采用的是<code>RSU-4F</code>，注意<code>RSU-4F</code>和<code>RSU-4</code>两者结构并不相同。在<code>RSU-4F</code>中并没有进行下采样或上采样，而是将采样层全部替换成了膨胀卷积。(其中<code>4</code>代表<code>RSU</code>的深度)。下图为<code>RSU-7</code>的结构图：<br><img src="https://pic1.imgdb.cn/item/635bc3bf16f2c2beb154b9ae.png" alt=""></p>
+<h2 id="3-代码实现-Paddle"><a href="#3-代码实现-Paddle" class="headerlink" title="3. 代码实现(Paddle)"></a>3. 代码实现(Paddle)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">REBNCONV</span>(nn.Layer):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;实现Conv+BN+ReLU模块&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_ch=<span class="number">3</span>, out_ch=<span class="number">3</span>, dirate=<span class="number">1</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(REBNCONV, self).__init__()</span><br><span class="line"></span><br><span class="line">        self.conv_s1 = nn.Conv2D(</span><br><span class="line">            in_ch, out_ch, <span class="number">3</span>, padding=<span class="number">1</span> * dirate, dilation=<span class="number">1</span> * dirate)</span><br><span class="line">        self.bn_s1 = nn.BatchNorm2D(out_ch)</span><br><span class="line">        self.relu_s1 = nn.ReLU()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line"></span><br><span class="line">        hx = x</span><br><span class="line">        xout = self.relu_s1(self.bn_s1(self.conv_s1(hx)))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> xout</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_upsample_like</span>(<span class="params">src, tar</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;上采样&quot;&quot;&quot;</span></span><br><span class="line">    src = F.upsample(src, size=paddle.shape(tar)[<span class="number">2</span>:], mode=<span class="string">&#x27;bilinear&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> src</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RSU7</span>(nn.Layer):  </span><br><span class="line">    <span class="string">&quot;&quot;&quot;实现RSU-7即En_1&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_ch=<span class="number">3</span>, mid_ch=<span class="number">12</span>, out_ch=<span class="number">3</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(RSU7, self).__init__()</span><br><span class="line"></span><br><span class="line">        self.rebnconvin = REBNCONV(in_ch, out_ch, dirate=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        self.rebnconv1 = REBNCONV(out_ch, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line">        self.pool1 = nn.MaxPool2D(<span class="number">2</span>, stride=<span class="number">2</span>, ceil_mode=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        self.rebnconv2 = REBNCONV(mid_ch, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line">        self.pool2 = nn.MaxPool2D(<span class="number">2</span>, stride=<span class="number">2</span>, ceil_mode=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        self.rebnconv3 = REBNCONV(mid_ch, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line">        self.pool3 = nn.MaxPool2D(<span class="number">2</span>, stride=<span class="number">2</span>, ceil_mode=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        self.rebnconv4 = REBNCONV(mid_ch, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line">        self.pool4 = nn.MaxPool2D(<span class="number">2</span>, stride=<span class="number">2</span>, ceil_mode=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        self.rebnconv5 = REBNCONV(mid_ch, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line">        self.pool5 = nn.MaxPool2D(<span class="number">2</span>, stride=<span class="number">2</span>, ceil_mode=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        self.rebnconv6 = REBNCONV(mid_ch, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        self.rebnconv7 = REBNCONV(mid_ch, mid_ch, dirate=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        self.rebnconv6d = REBNCONV(mid_ch * <span class="number">2</span>, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line">        self.rebnconv5d = REBNCONV(mid_ch * <span class="number">2</span>, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line">        self.rebnconv4d = REBNCONV(mid_ch * <span class="number">2</span>, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line">        self.rebnconv3d = REBNCONV(mid_ch * <span class="number">2</span>, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line">        self.rebnconv2d = REBNCONV(mid_ch * <span class="number">2</span>, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line">        self.rebnconv1d = REBNCONV(mid_ch * <span class="number">2</span>, out_ch, dirate=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line"></span><br><span class="line">        hx = x</span><br><span class="line">        hxin = self.rebnconvin(hx)</span><br><span class="line"></span><br><span class="line">        hx1 = self.rebnconv1(hxin)</span><br><span class="line">        hx = self.pool1(hx1)</span><br><span class="line"></span><br><span class="line">        hx2 = self.rebnconv2(hx)</span><br><span class="line">        hx = self.pool2(hx2)</span><br><span class="line"></span><br><span class="line">        hx3 = self.rebnconv3(hx)</span><br><span class="line">        hx = self.pool3(hx3)</span><br><span class="line"></span><br><span class="line">        hx4 = self.rebnconv4(hx)</span><br><span class="line">        hx = self.pool4(hx4)</span><br><span class="line"></span><br><span class="line">        hx5 = self.rebnconv5(hx)</span><br><span class="line">        hx = self.pool5(hx5)</span><br><span class="line"></span><br><span class="line">        hx6 = self.rebnconv6(hx)</span><br><span class="line"></span><br><span class="line">        hx7 = self.rebnconv7(hx6)</span><br><span class="line"></span><br><span class="line">        hx6d = self.rebnconv6d(paddle.concat((hx7, hx6), <span class="number">1</span>))</span><br><span class="line">        hx6dup = _upsample_like(hx6d, hx5)</span><br><span class="line"></span><br><span class="line">        hx5d = self.rebnconv5d(paddle.concat((hx6dup, hx5), <span class="number">1</span>))</span><br><span class="line">        hx5dup = _upsample_like(hx5d, hx4)</span><br><span class="line"></span><br><span class="line">        hx4d = self.rebnconv4d(paddle.concat((hx5dup, hx4), <span class="number">1</span>))</span><br><span class="line">        hx4dup = _upsample_like(hx4d, hx3)</span><br><span class="line"></span><br><span class="line">        hx3d = self.rebnconv3d(paddle.concat((hx4dup, hx3), <span class="number">1</span>))</span><br><span class="line">        hx3dup = _upsample_like(hx3d, hx2)</span><br><span class="line"></span><br><span class="line">        hx2d = self.rebnconv2d(paddle.concat((hx3dup, hx2), <span class="number">1</span>))</span><br><span class="line">        hx2dup = _upsample_like(hx2d, hx1)</span><br><span class="line"></span><br><span class="line">        hx1d = self.rebnconv1d(paddle.concat((hx2dup, hx1), <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> hx1d + hxin</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RSU4F</span>(nn.Layer):  </span><br><span class="line">    <span class="string">&quot;&quot;&quot;实现RSU-4F模块&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_ch=<span class="number">3</span>, mid_ch=<span class="number">12</span>, out_ch=<span class="number">3</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(RSU4F, self).__init__()</span><br><span class="line"></span><br><span class="line">        self.rebnconvin = REBNCONV(in_ch, out_ch, dirate=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        self.rebnconv1 = REBNCONV(out_ch, mid_ch, dirate=<span class="number">1</span>)</span><br><span class="line">        self.rebnconv2 = REBNCONV(mid_ch, mid_ch, dirate=<span class="number">2</span>)</span><br><span class="line">        self.rebnconv3 = REBNCONV(mid_ch, mid_ch, dirate=<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">        self.rebnconv4 = REBNCONV(mid_ch, mid_ch, dirate=<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line">        self.rebnconv3d = REBNCONV(mid_ch * <span class="number">2</span>, mid_ch, dirate=<span class="number">4</span>)</span><br><span class="line">        self.rebnconv2d = REBNCONV(mid_ch * <span class="number">2</span>, mid_ch, dirate=<span class="number">2</span>)</span><br><span class="line">        self.rebnconv1d = REBNCONV(mid_ch * <span class="number">2</span>, out_ch, dirate=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line"></span><br><span class="line">        hx = x</span><br><span class="line"></span><br><span class="line">        hxin = self.rebnconvin(hx)</span><br><span class="line"></span><br><span class="line">        hx1 = self.rebnconv1(hxin)</span><br><span class="line">        hx2 = self.rebnconv2(hx1)</span><br><span class="line">        hx3 = self.rebnconv3(hx2)</span><br><span class="line"></span><br><span class="line">        hx4 = self.rebnconv4(hx3)</span><br><span class="line"></span><br><span class="line">        hx3d = self.rebnconv3d(paddle.concat((hx4, hx3), <span class="number">1</span>))</span><br><span class="line">        hx2d = self.rebnconv2d(paddle.concat((hx3d, hx2), <span class="number">1</span>))</span><br><span class="line">        hx1d = self.rebnconv1d(paddle.concat((hx2d, hx1), <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> hx1d + hxin</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>完整代码：<a target="_blank" rel="noopener" href="https://github.com/PaddlePaddle/PaddleSeg/blob/release%2F2.6/paddleseg/models/u2net.py">https://github.com/PaddlePaddle/PaddleSeg/blob/release%2F2.6/paddleseg/models/u2net.py</a></strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%A8%A1%E5%9E%8B/" rel="tag"># 模型</a>
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" rel="tag"># 图像分割</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/27/AttUNet/" rel="prev" title="Attention UNet">
+      <i class="fa fa-chevron-left"></i> Attention UNet
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/10/31/UNetplusplus/" rel="next" title="UNet++">
+      UNet++ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#U-2-Net-%E8%AE%BA%E6%96%87%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">$U^2-Net$论文详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BA%E6%96%87%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">1. 论文简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E8%A7%A3%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">2. 网络结构解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-Paddle"><span class="nav-number">1.3.</span> <span class="nav-text">3. 代码实现(Paddle)</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CodeCat"
+      src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">CodeCat</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/codecat0" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;codecat0" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2049413359@qq.com" title="E-Mail → mailto:2049413359@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/qq_42735631" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_42735631" rel="noopener" target="_blank"><i class="fa fa-crosshairs fa-fw"></i>CSDN</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bilibili.com/" title="https:&#x2F;&#x2F;www.bilibili.com&#x2F;" rel="noopener" target="_blank">Bilibili</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://omofun.tv/" title="https:&#x2F;&#x2F;omofun.tv&#x2F;" rel="noopener" target="_blank">OmoFun</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://pytorch.org/" title="https:&#x2F;&#x2F;pytorch.org&#x2F;" rel="noopener" target="_blank">PyTorch</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://scikit-learn.org/stable/" title="https:&#x2F;&#x2F;scikit-learn.org&#x2F;stable&#x2F;" rel="noopener" target="_blank">sklearn</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1377261977&auto=1&height=66"></iframe>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CodeCat</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">151k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:18</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>-->
+
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'ff115aa2d466d2b668a2',
+      clientSecret: '6b319b34677bb39ea28a4bc3971b71906ccd64ae',
+      repo        : 'blog_comment',
+      owner       : 'codecat0',
+      admin       : ['codecat0'],
+      id          : 'e2cf3ea15233b5f04e7e5efe6f4ac077',
+        language: '',
+      distractionFreeMode: false
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+
+  
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/fireworks.js"></script>
+  
+ 
+</body>
+</html>
