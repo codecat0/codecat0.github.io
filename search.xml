@@ -1391,4 +1391,64 @@ Jaccard(X,Y)=\frac{X\cap Y}{X\cup Y}</script>]]></content>
         <tag>Transformer</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Large-Scale Pretrained Audio Neural Networks for Audio Pattern Recognition</title>
+    <url>/2023/09/08/AudioClassifiaction/</url>
+    <content><![CDATA[<h1 id="PANNs-Large-Scale-Pretrained-Audio-Neural-Networks-for-Audio-Pattern-Recognition"><a href="#PANNs-Large-Scale-Pretrained-Audio-Neural-Networks-for-Audio-Pattern-Recognition" class="headerlink" title="PANNs: Large-Scale Pretrained Audio Neural Networks for Audio Pattern Recognition"></a>PANNs: Large-Scale Pretrained Audio Neural Networks for Audio Pattern Recognition</h1><blockquote>
+<p>在计算机视觉和自然语言处理中，在大规模数据集上预训练的系统已经很好地推广到了几个任务中。然而，在用于音频模式识别的大规模数据集上对预训练系统的研究有限。在本文中，我们提出了在大规模AudioSet数据集上训练的预训练音频神经网络（PANN）。这些PANN被转移到其他与音频相关的任务。我们研究了由各种卷积神经网络建模的PANN的性能和计算复杂性。我们提出了一种称为Wavegram-Logmel-CNN的架构，使用log-mel频谱图和波形图作为输入特征。我们最好的PANN系统在AudioSet标签上实现了最先进的平均精度（mAP）0.439。<br><span id="more"></span></p>
+</blockquote>
+<h2 id="1-AUDIO-TAGGING-SYSTEMS"><a href="#1-AUDIO-TAGGING-SYSTEMS" class="headerlink" title="1. AUDIO TAGGING SYSTEMS"></a>1. AUDIO TAGGING SYSTEMS</h2><h3 id="1-1-CNNs"><a href="#1-1-CNNs" class="headerlink" title="1.1 CNNs"></a>1.1 CNNs</h3><p>CNN架构通常通过卷积层来提取特征，对于音频分类而言，通常使用 <code>log-mel</code>频谱图作为输入。即将短时傅里叶变换<code>STFT</code>应用于时频波形图以计算频谱图，然后将<code>mel</code>滤波器组应用于频谱图，最后进行对数运算以提取<code>log-mel</code>频谱图</p>
+<p>卷积神经网络架构如下图所示：<br><img src="https://pic.imgdb.cn/item/64fd83b5661c6c8e54321f8b.png" alt=""></p>
+<p>深度残差网络中的残差块可以提高模型收敛速度，解决网络过深导致的退化问题。</p>
+<p>深度残差网络架构如下图所示：<br><img src="https://pic.imgdb.cn/item/64fd8540661c6c8e54326195.png" alt=""></p>
+<p>当模型在便携式设备实现时，计算复杂性是一个重要问题，MobileNets使用深度可分离卷积可以减少模型参数数量。其架构如下图所示：</p>
+<p><img src="https://pic.imgdb.cn/item/64fd8676661c6c8e5432ca13.png" alt=""></p>
+<h3 id="1-2-one-dimensional-CNNs"><a href="#1-2-one-dimensional-CNNs" class="headerlink" title="1.2 one-dimensional CNNs"></a>1.2 one-dimensional CNNs</h3><p>上面的音频分类系统是基于<code>log-mel</code>频谱图，这是一种人工提取的特征，为了提高音频分类系统的性能，研究人员直接对时域波形图进行识别。</p>
+<p><a href="https://arxiv.org/abs/1610.00087">DaiNet</a>将卷积核大小为80，步长为4的一维卷积作用于音频波形图进行特征提取；然后再使用卷积核大小为3，步长为4的意味卷积进行进一步特征提取；最后通过<code>softmax</code>层进行分类预测。其中每层一维卷积后跟着一个池化核大小为4的最大池化层。</p>
+<p><img src="https://pic.imgdb.cn/item/64fd880c661c6c8e54334379.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/1703.01789">LeeNet</a>y与<code>DaiNet</code>使用大卷积核不同是使用卷积核大小为3的一维卷积作用于时域波形图，其中每一个一维卷积层后跟着一个尺寸为2下采样层。</p>
+<p><img src="https://pic.imgdb.cn/item/64fd8af8661c6c8e5433a408.png" alt=""></p>
+<h3 id="1-3-Wavegram-Logmel-CNN"><a href="#1-3-Wavegram-Logmel-CNN" class="headerlink" title="1.3 Wavegram-Logmel-CNN"></a>1.3 Wavegram-Logmel-CNN</h3><p>本文将<code>Wavegram</code>和<code>log-mel</code>谱图组合成一个新的表示。通过这种方式，我们可以利用来自时域波形和对数<code>mel</code>频谱图的信息。组合是沿着通道维度进行的。</p>
+<p><img src="https://pic.imgdb.cn/item/64fd8d15661c6c8e5434244c.png" alt=""></p>
+<h2 id="2-Data-augmentation"><a href="#2-Data-augmentation" class="headerlink" title="2. Data augmentation"></a>2. Data augmentation</h2><h3 id="2-1-Mixup"><a href="#2-1-Mixup" class="headerlink" title="2.1 Mixup"></a>2.1 Mixup</h3><p><a href="https://arxiv.org/abs/1710.09412">Mixup</a>是一种通过对数据集中的两个音频片段进行混合来扩充数据集的方法。</p>
+<p>对于两段音频$x_1,x_2$，标签为$y_1,y_2$而言，数据增强后数据为：</p>
+<script type="math/tex; mode=display">x = \alpha x_1 + (1 - \alpha)x_2</script><script type="math/tex; mode=display">y = \alpha y_1 + (1 - \alpha)y_2</script><h3 id="2-2-SpecAugment"><a href="#2-2-SpecAugment" class="headerlink" title="2.2 SpecAugment"></a>2.2 SpecAugment</h3><p><a href="https://arxiv.org/abs/1904.08779">SpecAugment</a>被提出用于统计语音识别的语音数据。SpecAugment使用频率掩蔽和时间掩蔽对音频片段的<code>log-mel</code>频谱图进行操作。</p>
+<h2 id="3-EXPERIMENTS"><a href="#3-EXPERIMENTS" class="headerlink" title="3. EXPERIMENTS"></a>3. EXPERIMENTS</h2><h3 id="3-1-提高模型的识别准确率的方法"><a href="#3-1-提高模型的识别准确率的方法" class="headerlink" title="3.1 提高模型的识别准确率的方法"></a>3.1 提高模型的识别准确率的方法</h3><ol>
+<li><strong>使用<code>Mixup</code>数据增强可以提高模型的识别准确率</strong><br><img src="https://pic.imgdb.cn/item/64fd910a661c6c8e543491e6.png" alt=""></li>
+</ol>
+<ol>
+<li><p><strong>减小帧之间的间隔可以提高模型的识别准确率</strong><br><img src="https://pic.imgdb.cn/item/64fd9192661c6c8e54349ff9.png" alt=""></p>
+</li>
+<li><p><strong>提高<code>Embedding</code>的大小可以提高模型的识别准确率</strong><br><img src="https://pic.imgdb.cn/item/64fd9211661c6c8e5434b3b7.png" alt=""></p>
+</li>
+<li><p><strong>提高训练数据集的大小可以提高模型识别准确率</strong><br><img src="https://pic.imgdb.cn/item/64fd923c661c6c8e5434c425.png" alt=""></p>
+</li>
+<li><p><strong>提高采样频率可以提高模型的识别准确率</strong><br><img src="https://pic.imgdb.cn/item/64fd925c661c6c8e5434c74e.png" alt=""></p>
+</li>
+<li><p><strong>提高<code>mel</code>组的个数可以提高模型识别准确率</strong><br><img src="https://pic.imgdb.cn/item/64fd927f661c6c8e5434cba0.png" alt=""></p>
+</li>
+</ol>
+<h3 id="3-2-不同模型比较分析"><a href="#3-2-不同模型比较分析" class="headerlink" title="3.2 不同模型比较分析"></a>3.2 不同模型比较分析</h3><p><img src="https://pic.imgdb.cn/item/64fd932d661c6c8e5434df3e.png" alt=""></p>
+<ol>
+<li><p><strong><code>CNNs</code>架构：网络层数越深，识别准确率越高，为<code>0.431</code></strong></p>
+</li>
+<li><p><strong><code>ResNets</code>架构：<code>ResNet38</code>识别准确率最高，为<code>0.434</code></strong></p>
+</li>
+<li><p><strong><code>MobileNet</code>架构：<code>MobileNetV1</code>识别准确最高，为<code>0.389</code></strong></p>
+</li>
+<li><p><strong><code>One-Dimension CNN</code>架构：<code>Res1dNet31</code>识别准确率最高，为<code>0.365</code></strong></p>
+</li>
+</ol>
+<p><strong>通过比较可知基于<code>log-mel</code>频谱图的模型架构比基于时域波形图的模型架构的识别准确率要高，而基于<code>Wavegram-Logmel</code>的模型表现最好，<code>mAP</code>为<code>0.439``。对于模型参数而言</code>MobileNet`架构远低于其他模型架构</strong></p>
+<hr>
+<p><strong>论文实现地址：</strong> <a href="https://github.com/qiuqiangkong/audioset_tagging_cnn">https://github.com/qiuqiangkong/audioset_tagging_cnn</a></p>
+]]></content>
+      <categories>
+        <category>音频分类</category>
+      </categories>
+      <tags>
+        <tag>模型</tag>
+        <tag>音频分类</tag>
+      </tags>
+  </entry>
 </search>
