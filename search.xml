@@ -1414,9 +1414,8 @@ Jaccard(X,Y)=\frac{X\cap Y}{X\cup Y}</script>]]></content>
 <p>对于两段音频$x_1,x_2$，标签为$y_1,y_2$而言，数据增强后数据为：</p>
 <script type="math/tex; mode=display">x = \alpha x_1 + (1 - \alpha)x_2</script><script type="math/tex; mode=display">y = \alpha y_1 + (1 - \alpha)y_2</script><h3 id="2-2-SpecAugment"><a href="#2-2-SpecAugment" class="headerlink" title="2.2 SpecAugment"></a>2.2 SpecAugment</h3><p><a href="https://arxiv.org/abs/1904.08779">SpecAugment</a>被提出用于统计语音识别的语音数据。SpecAugment使用频率掩蔽和时间掩蔽对音频片段的<code>log-mel</code>频谱图进行操作。</p>
 <h2 id="3-EXPERIMENTS"><a href="#3-EXPERIMENTS" class="headerlink" title="3. EXPERIMENTS"></a>3. EXPERIMENTS</h2><h3 id="3-1-提高模型的识别准确率的方法"><a href="#3-1-提高模型的识别准确率的方法" class="headerlink" title="3.1 提高模型的识别准确率的方法"></a>3.1 提高模型的识别准确率的方法</h3><ol>
-<li><strong>使用<code>Mixup</code>数据增强可以提高模型的识别准确率</strong><br><img src="https://pic.imgdb.cn/item/64fd910a661c6c8e543491e6.png" alt=""></li>
-</ol>
-<ol>
+<li><p><strong>使用<code>Mixup</code>数据增强可以提高模型的识别准确率</strong><br><img src="https://pic.imgdb.cn/item/64fd910a661c6c8e543491e6.png" alt=""></p>
+</li>
 <li><p><strong>减小帧之间的间隔可以提高模型的识别准确率</strong><br><img src="https://pic.imgdb.cn/item/64fd9192661c6c8e54349ff9.png" alt=""></p>
 </li>
 <li><p><strong>提高<code>Embedding</code>的大小可以提高模型的识别准确率</strong><br><img src="https://pic.imgdb.cn/item/64fd9211661c6c8e5434b3b7.png" alt=""></p>
@@ -1439,7 +1438,7 @@ Jaccard(X,Y)=\frac{X\cap Y}{X\cup Y}</script>]]></content>
 <li><p><strong><code>One-Dimension CNN</code>架构：<code>Res1dNet31</code>识别准确率最高，为<code>0.365</code></strong></p>
 </li>
 </ol>
-<p><strong>通过比较可知基于<code>log-mel</code>频谱图的模型架构比基于时域波形图的模型架构的识别准确率要高，而基于<code>Wavegram-Logmel</code>的模型表现最好，<code>mAP</code>为<code>0.439``。对于模型参数而言</code>MobileNet`架构远低于其他模型架构</strong></p>
+<p><strong>通过比较可知基于<code>log-mel</code>频谱图的模型架构比基于时域波形图的模型架构的识别准确率要高，而基于<code>Wavegram-Logmel</code>的模型表现最好，<code>mAP</code>为<code>0.439</code>。对于模型参数而言<code>MobileNet</code>架构远低于其他模型架构</strong></p>
 <hr>
 <p><strong>论文实现地址：</strong> <a href="https://github.com/qiuqiangkong/audioset_tagging_cnn">https://github.com/qiuqiangkong/audioset_tagging_cnn</a></p>
 ]]></content>
